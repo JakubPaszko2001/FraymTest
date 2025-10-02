@@ -26,7 +26,7 @@ export default function Page() {
 
           {/* HTML przewijany razem z 3D */}
           <Scroll html>
-            <section style={{ height: '100vh',  width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* <section style={{ height: '100vh',  width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <h1 style={{ color: 'white', fontSize: '4rem' }}>FRAYMWEB 🚀</h1>
             </section>
             <section style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -34,7 +34,7 @@ export default function Page() {
             </section>
             <section style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <p style={{ color: 'white', fontSize: '2rem' }}>...i dodaj więcej sekcji!</p>
-            </section>
+            </section> */}
           </Scroll>
         </ScrollControls>
 
