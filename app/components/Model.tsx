@@ -41,26 +41,25 @@ export default function Model() {
   })
 
   // GSAP: pływa tylko mesh GLB (góra–dół)
-  useLayoutEffect(() => {
-    if (!torus.current) return
-    const startY = torus.current.position.y
+useLayoutEffect(() => {
+  const mesh = torus.current
+  if (!mesh) return
 
-    const tl = gsap.timeline({ repeat: -1, yoyo: true })
-    tl.to(torus.current.position, {
-      y: startY + floatAmplitude,
-      duration: floatDuration,
-      ease: 'sine.inOut',
-    })
+  const startY = mesh.position.y
+  const tl = gsap.timeline({ repeat: -1, yoyo: true })
 
-    return () => {
-      tl.kill()
-      if (torus.current) {
-        gsap.killTweensOf(torus.current.position)
-        torus.current.position.y = startY
-      }
-    }
-    // Zmieniamy animację gdy użytkownik przestawi suwak
-  }, [floatAmplitude, floatDuration])
+  tl.to(mesh.position, {
+    y: startY + floatAmplitude,
+    duration: floatDuration,
+    ease: 'sine.inOut',
+  })
+
+  return () => {
+    tl.kill()
+    gsap.killTweensOf(mesh.position)
+    mesh.position.y = startY
+  }
+}, [floatAmplitude, floatDuration])
 
   return (
     <group scale={viewport.width / 3.75}>
@@ -91,7 +90,7 @@ export default function Model() {
           chromaticAberration={chromaticAberration}
           backside={backside}
           attenuationDistance={attenuationDistance}
-          color={color as any}
+          color={color as THREE.ColorRepresentation}
         />
       </mesh>
     </group>
