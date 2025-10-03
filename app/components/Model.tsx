@@ -6,32 +6,43 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 
 export default function Model() {
-  const { nodes } = useGLTF("/medias/lavalampMesh6.glb");
+  const { nodes } = useGLTF("/medias/lavalampMesh5k.glb");
   const { viewport } = useThree()
 
   // Refy
   const torus = useRef<THREE.Mesh | null>(null);
   const materialRef = useRef<ComponentRef<typeof MeshTransmissionMaterial>>(null)
 
+  const thickness = 0.2
+  const roughness = 0
+  const transmission = 1
+  const ior = 1.2
+  const chromaticAberration = 0.02
+  const backside = true
+  const attenuationDistance = 2.5
+  const color: THREE.ColorRepresentation = '#0000FF'
+  const floatAmplitude = 0.25
+  const floatDuration = 2.5
+
   // Kontrolki Leva – materiał + pływanie
-  const {
-    thickness, roughness, transmission, ior, chromaticAberration,
-    backside, attenuationDistance, color,
-    floatAmplitude, floatDuration
-  } = useControls({
-    // Material
-    thickness: { value: 0.2, min: 0, max: 3, step: 0.05 },
-    roughness: { value: 0, min: 0, max: 1, step: 0.1 },
-    transmission: { value: 1, min: 0, max: 1, step: 0.1 },
-    ior: { value: 1.2, min: 0, max: 3, step: 0.1 },
-    chromaticAberration: { value: 0.02, min: 0, max: 1 },
-    backside: { value: true },
-    attenuationDistance: { value: 2.5, min: 0, max: 10, step: 0.1 },
-    color: { value: '#ff00ff' },
-    // Floating
-    floatAmplitude: { value: 0.25, min: 0, max: 1, step: 0.01 },
-    floatDuration: { value: 2.5, min: 0.5, max: 10, step: 0.1 },
-  })
+  // const {
+  //   thickness, roughness, transmission, ior, chromaticAberration,
+  //   backside, attenuationDistance, color,
+  //   floatAmplitude, floatDuration
+  // } = useControls({
+  //   // Material
+  //   thickness: { value: 0.2, min: 0, max: 3, step: 0.05 },
+  //   roughness: { value: 0, min: 0, max: 1, step: 0.1 },
+  //   transmission: { value: 1, min: 0, max: 1, step: 0.1 },
+  //   ior: { value: 1.2, min: 0, max: 3, step: 0.1 },
+  //   chromaticAberration: { value: 0.02, min: 0, max: 1 },
+  //   backside: { value: true },
+  //   attenuationDistance: { value: 2.5, min: 0, max: 10, step: 0.1 },
+  //   color: { value: '#0053ff' },
+  //   // Floating
+  //   floatAmplitude: { value: 0.25, min: 0, max: 1, step: 0.01 },
+  //   floatDuration: { value: 2.5, min: 0.5, max: 10, step: 0.1 },
+  // })
 
   // Delikatna rotacja obiektu
   useFrame(() => {
@@ -41,25 +52,25 @@ export default function Model() {
   })
 
   // GSAP: pływa tylko mesh GLB (góra–dół)
-useLayoutEffect(() => {
-  const mesh = torus.current
-  if (!mesh) return
+  useLayoutEffect(() => {
+    const mesh = torus.current
+    if (!mesh) return
 
-  const startY = mesh.position.y
-  const tl = gsap.timeline({ repeat: -1, yoyo: true })
+    const startY = mesh.position.y
+    const tl = gsap.timeline({ repeat: -1, yoyo: true })
 
-  tl.to(mesh.position, {
-    y: startY + floatAmplitude,
-    duration: floatDuration,
-    ease: 'sine.inOut',
-  })
+    tl.to(mesh.position, {
+      y: startY + floatAmplitude,
+      duration: floatDuration,
+      ease: 'sine.inOut',
+    })
 
-  return () => {
-    tl.kill()
-    gsap.killTweensOf(mesh.position)
-    mesh.position.y = startY
-  }
-}, [floatAmplitude, floatDuration])
+    return () => {
+      tl.kill()
+      gsap.killTweensOf(mesh.position)
+      mesh.position.y = startY
+    }
+  }, [floatAmplitude, floatDuration])
 
   return (
     <group scale={viewport.width / 3.75}>
@@ -71,6 +82,7 @@ useLayoutEffect(() => {
         anchorX="center"
         anchorY="middle"
         sdfGlyphSize={256}
+        rotation={[0, 0, Math.PI / 2]}
       >
         FRAYMWEB
       </Text>
@@ -78,8 +90,9 @@ useLayoutEffect(() => {
       <mesh
         ref={torus}
         geometry={(nodes.Mball as THREE.Mesh).geometry}
-        position={[0, -2.3, 0]}
+        position={[0, -1, 0]}
         scale={[0.13, 0.13, 0.13]}
+        // scale={[0.06, 0.06, 0.06]}
       >
         <MeshTransmissionMaterial
           ref={materialRef}

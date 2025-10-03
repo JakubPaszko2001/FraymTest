@@ -1,5 +1,4 @@
 import "./globals.css";
-import GridOverlay from "./components/GridOverlay";
 import Navbar from "./components/Navbar";
 
 export default function RootLayout({
@@ -10,7 +9,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <GridOverlay /> */}
         <Navbar />
         {children}
       </body>

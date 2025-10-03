@@ -18,26 +18,11 @@ export default function Page() {
         }}
       >
         {/* ScrollControls = smoothscroll */}
-        <ScrollControls pages={3} damping={0.3}>
-          {/* 3D przewijane */}
-          <Scroll>
+        {/* <ScrollControls pages={1} damping={0.3}>
+          <Scroll> */}
             <Model />
-          </Scroll>
-
-          {/* HTML przewijany razem z 3D */}
-          <Scroll html>
-            {/* <section style={{ height: '100vh',  width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <h1 style={{ color: 'white', fontSize: '4rem' }}>FRAYMWEB 🚀</h1>
-            </section>
-            <section style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <p style={{ color: 'white', fontSize: '2rem' }}>Scrolluj w dół płynnie...</p>
-            </section>
-            <section style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <p style={{ color: 'white', fontSize: '2rem' }}>...i dodaj więcej sekcji!</p>
-            </section> */}
-          </Scroll>
-        </ScrollControls>
-
+          {/* </Scroll>
+        </ScrollControls> */}
         <Environment preset="city" />
       </Canvas>
     </>
