@@ -5,6 +5,7 @@ import Model from './components/Model'
 import DiagonalStripes from "./components/DiagonalStripes";
 import AboutSection from './components/AboutSection';
 import AccordionSection from './components/AccordionSection';
+import Test2 from './components/Test2';
 
 export default function Page() {
   return (
@@ -26,6 +27,7 @@ export default function Page() {
       </div>
       <AboutSection />
       <AccordionSection />
+      <Test2 />
     </>
   )
 }

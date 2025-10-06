@@ -81,7 +81,7 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
 }
 
 export default function AccordionSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const sections = [
     {

@@ -30,7 +30,7 @@ export default function Navbar() {
     <nav
       className="
         fixed inset-x-0 top-0 z-50 h-[72px]
-        flex items-center justify-between
+        flex items-center justify-between w-full
         px-6 md:px-10
       "
     >
