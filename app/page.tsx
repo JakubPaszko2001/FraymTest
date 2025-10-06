@@ -4,6 +4,7 @@ import { Environment, ScrollControls, Scroll } from '@react-three/drei'
 import Model from './components/Model'
 import DiagonalStripes from "./components/DiagonalStripes";
 import AboutSection from './components/AboutSection';
+import AccordionSection from './components/AccordionSection';
 
 export default function Page() {
   return (
@@ -31,6 +32,7 @@ export default function Page() {
         />
       </div>
       <AboutSection />
+      <AccordionSection />
     </>
   )
 }
