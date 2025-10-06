@@ -1,39 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 
 interface SectionProps {
   title: string;
   items: string[];
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
-function AccordionItem({ title, items }: SectionProps) {
-  const [open, setOpen] = useState(false);
+function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    const el = contentRef.current;
+
+    if (isOpen) {
+      gsap.to(el, {
+        height: "auto",
+        opacity: 1,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      gsap.to(arrowRef.current, {
+        rotate: 225, // strzałka w górę
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    } else {
+      gsap.to(el, {
+        height: 0,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power1.inOut",
+      });
+      gsap.to(arrowRef.current, {
+        rotate: 45, // strzałka w dół
+        duration: 0.4,
+        ease: "power2.inOut",
+      });
+    }
+  }, [isOpen]);
 
   return (
-    <div className="border-b border-gray-700">
-      {/* 🔹 Nagłówek sekcji */}
+    <div className="border-b border-gray-700 overflow-hidden">
       <button
-        onClick={() => setOpen(!open)}
+        onClick={onToggle}
         className="w-full flex justify-between items-center py-4 px-4 text-white font-extrabold text-lg uppercase tracking-wide"
       >
         {title}
 
-        {/* 🔹 Strzałka CSS (domyślnie ↓, po otwarciu ↑) */}
+        {/* Strzałka (tworzona w CSS) */}
         <span
-          className={`w-3 h-3 border-r-2 border-b-2 border-white transform transition-transform duration-300 ${
-            open ? "rotate-225" : "rotate-45"
-          }`}
+          ref={arrowRef}
+          className="w-3 h-3 border-r-2 border-b-2 border-white transform rotate-45"
         ></span>
       </button>
 
-      {/* 🔹 Zawartość sekcji */}
       <div
-        className={`overflow-hidden transition-all duration-500 ${
-          open ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        ref={contentRef}
+        className="overflow-hidden opacity-0 h-0 pl-8 pr-4 text-gray-200 text-sm"
       >
-        <ul className="pl-8 pr-4 pb-4 text-gray-200 text-sm space-y-2">
+        <ul className="pb-4 space-y-2">
           {items.map((item, i) => (
             <li
               key={i}
@@ -49,34 +81,38 @@ function AccordionItem({ title, items }: SectionProps) {
 }
 
 export default function AccordionSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const sections = [
+    {
+      title: "Biznesowe",
+      items: ["Firmowa", "Usługowa", "Marketplace", "Platforma SAAS"],
+    },
+    {
+      title: "Personalne",
+      items: ["Portfolio", "Blog", "Wizytówka", "Strona CV"],
+    },
+    {
+      title: "Sklepy",
+      items: ["E-commerce", "Dropshipping", "Subskrypcyjny", "Z lokalnym odbiorem"],
+    },
+    {
+      title: "Kreatywne",
+      items: ["Studio artystyczne", "Fotograficzna", "Agencja kreatywna", "Muzyczna"],
+    },
+  ];
+
   return (
     <section className="w-full max-w-md bg-black text-white border border-gray-700 divide-y divide-gray-700">
-      <AccordionItem
-        title="Biznesowe"
-        items={["Firmowa", "Usługowa", "Marketplace", "Platforma SAAS"]}
-      />
-      <AccordionItem
-        title="Personalne"
-        items={["Portfolio", "Blog", "Wizytówka", "Strona CV"]}
-      />
-      <AccordionItem
-        title="Sklepy"
-        items={[
-          "E-commerce",
-          "Dropshipping",
-          "Subskrypcyjny",
-          "Z lokalnym odbiorem",
-        ]}
-      />
-      <AccordionItem
-        title="Kreatywne"
-        items={[
-          "Studio artystyczne",
-          "Fotograficzna",
-          "Agencja kreatywna",
-          "Muzyczna",
-        ]}
-      />
+      {sections.map((section, index) => (
+        <AccordionItem
+          key={index}
+          title={section.title}
+          items={section.items}
+          isOpen={openIndex === index}
+          onToggle={() => setOpenIndex(openIndex === index ? null : index)}
+        />
+      ))}
     </section>
   );
 }
