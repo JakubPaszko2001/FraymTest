@@ -10,14 +10,7 @@ export default function Page() {
   return (
     <>
       <div className="relative w-screen h-screen overflow-hidden">
-        <Canvas
-          camera={{ position: [0, 0, 0.8] }}
-          className="absolute inset-0 z-0"
-          style={{ background: '#000000' }}
-        >
-          <Model />
-          <Environment preset="city" />
-        </Canvas>
+
 
         {/* DiagonalStripes jest absolute w środku, więc tu nic nie dodawaj */}
         <DiagonalStripes
