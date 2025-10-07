@@ -97,33 +97,12 @@ const fragmentShader = `
   }
 `;
 
-function NebulaParticles() {
+function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
   const pointsRef = useRef<THREE.Points>(null);
-  const uniforms = useMemo(
-    () => ({
-      uTime: { value: 0 },
-      uExplosion: { value: 0 },
-    }),
-    []
-  );
-
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-    const triggerExplosion = () => {
-      gsap.to(uniforms.uExplosion, {
-        value: 1,
-        duration: 1.2,
-        ease: "power2.inOut",
-        yoyo: true,
-        repeat: 1,
-        onComplete: () => {
-          timeout = setTimeout(triggerExplosion, 3000 + Math.random() * 4000);
-        },
-      });
-    };
-    timeout = setTimeout(triggerExplosion, 2000);
-    return () => clearTimeout(timeout);
-  }, [uniforms]);
+  const uniforms = useMemo(() => ({
+    uTime: { value: 0 },
+    uExplosion: { value: 0 },
+  }), []);
 
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
@@ -132,6 +111,39 @@ function NebulaParticles() {
       pointsRef.current.rotation.x += 0.0003;
     }
   });
+
+  // 🔹 Wybuch przy kliknięciu / przytrzymaniu
+  useEffect(() => {
+    const startHold = () => {
+      gsap.to(uniforms.uExplosion, {
+        value: 1,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      onHold(true);
+    };
+
+    const endHold = () => {
+      gsap.to(uniforms.uExplosion, {
+        value: 0,
+        duration: 0.8,
+        ease: "power2.inOut",
+      });
+      onHold(false);
+    };
+
+    window.addEventListener("mousedown", startHold);
+    window.addEventListener("mouseup", endHold);
+    window.addEventListener("touchstart", startHold);
+    window.addEventListener("touchend", endHold);
+
+    return () => {
+      window.removeEventListener("mousedown", startHold);
+      window.removeEventListener("mouseup", endHold);
+      window.removeEventListener("touchstart", startHold);
+      window.removeEventListener("touchend", endHold);
+    };
+  }, [onHold, uniforms]);
 
   const particles = useMemo(() => {
     const count = 18000;
@@ -170,28 +182,30 @@ function NebulaParticles() {
   );
 }
 
-function ResponsiveCamera() {
-  const { camera, size } = useThree();
-  useEffect(() => {
-    const aspect = size.width / size.height;
-    if (aspect < 0.75) camera.position.z = 13;
-    else camera.position.z = 8;
-    camera.updateProjectionMatrix();
-  }, [camera, size]);
-  return null;
+function ReactiveCamera() {
+  const { camera } = useThree();
+  const startZ = useRef(camera.position.z);
+
+  // 🔹 Zoom działa tylko, gdy użytkownik trzyma
+  const handleHold = (holding: boolean) => {
+    gsap.to(camera.position, {
+      z: holding ? startZ.current + 3 : startZ.current,
+      duration: 0.6,
+      ease: "power2.inOut",
+    });
+  };
+
+  return <NebulaParticles onHold={handleHold} />;
 }
 
 export default function NebulaScene() {
   return (
     <div className="w-full h-screen bg-black">
-      <Canvas camera={{ position: [0, 0, 1] }}>
-        <ResponsiveCamera />
-        <NebulaParticles />
-
-        {/* 🔹 Tekst 3D na środku */}
-        {/* <Text
-          font={'/fonts/hyperblob2.otf'}
-          position={[0, 0, -20]}
+      <Canvas camera={{ position: [0, 0, 15] }}>
+        <ReactiveCamera />
+        <Text
+          font={"/fonts/hyperblob2.otf"}
+          position={[0, 0, -1]}
           fontSize={1.4}
           color="white"
           anchorX="center"
@@ -199,7 +213,7 @@ export default function NebulaScene() {
           sdfGlyphSize={256}
         >
           FRAYMWEB
-        </Text> */}
+        </Text>
       </Canvas>
     </div>
   );
