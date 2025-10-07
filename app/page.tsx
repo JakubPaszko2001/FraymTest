@@ -11,10 +11,9 @@ export default function Page() {
   return (
     <>
       <div className="relative w-screen h-screen overflow-hidden">
-
-
+        <Test2 />
         {/* DiagonalStripes jest absolute w środku, więc tu nic nie dodawaj */}
-        <DiagonalStripes
+        {/* <DiagonalStripes
           topText="BUDUJEMY STRONY"
           bottomText="NIE DO ZASTĄPIENIA"
           topSpeed={70}
@@ -23,11 +22,10 @@ export default function Page() {
           bottomTiltDeg={0}
           stripeHeight={72}
           fontSize={24}
-        />
+        /> */}
       </div>
       <AboutSection />
       <AccordionSection />
-      <Test2 />
     </>
   )
 }

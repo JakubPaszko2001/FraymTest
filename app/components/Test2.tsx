@@ -1,6 +1,7 @@
 "use client";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Text } from "@react-three/drei";
 import { useRef, useMemo, useEffect } from "react";
 import gsap from "gsap";
 
@@ -10,7 +11,6 @@ const vertexShader = `
   varying float vNoise;
   varying vec3 vColor;
 
-  // --- Simplex noise 3D ---
   vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
   vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
   vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -69,14 +69,11 @@ const vertexShader = `
     vec3 pos = position;
     float noise = snoise(pos * 0.7 + uTime * 0.2);
 
-    // 💥 Silniejszy, ale płynniejszy wybuch
     float explosionStrength = uExplosion * 3.0;
     pos += normalize(pos) * (noise * 0.8 + explosionStrength * 1.5);
     pos *= (1.0 + uExplosion * 1.8);
 
     vNoise = noise;
-
-    // 🎨 Kolor przechodzi z niebieskiego w biały
     vColor = mix(
       vec3(0.4 + noise * 0.2, 0.5 + noise * 0.3, 1.0),
       vec3(1.0, 1.0, 1.0),
@@ -115,8 +112,8 @@ function NebulaParticles() {
     const triggerExplosion = () => {
       gsap.to(uniforms.uExplosion, {
         value: 1,
-        duration: 1.2, // ⏳ spowolniony wybuch
-        ease: "power2.inOut", // płynniejsze wejście i wyjście
+        duration: 1.2,
+        ease: "power2.inOut",
         yoyo: true,
         repeat: 1,
         onComplete: () => {
@@ -190,6 +187,19 @@ export default function NebulaScene() {
       <Canvas camera={{ position: [0, 0, 1] }}>
         <ResponsiveCamera />
         <NebulaParticles />
+
+        {/* 🔹 Tekst 3D na środku */}
+        {/* <Text
+          font={'/fonts/hyperblob2.otf'}
+          position={[0, 0, -20]}
+          fontSize={1.4}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+          sdfGlyphSize={256}
+        >
+          FRAYMWEB
+        </Text> */}
       </Canvas>
     </div>
   );
