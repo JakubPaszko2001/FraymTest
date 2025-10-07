@@ -124,7 +124,7 @@ export default function AboutSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen w-full bg-black flex items-center justify-center px-8 text-start flex flex-col">
+    <section className="relative min-h-screen w-full flex items-center justify-center px-8 text-start flex flex-col">
       {/* 🔹 Brush Stroke z animacją opacity */}
       <Image
         ref={imageRef}

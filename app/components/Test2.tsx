@@ -1,7 +1,7 @@
 "use client";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import gsap from "gsap";
 
 const vertexShader = `
@@ -97,7 +97,7 @@ const fragmentShader = `
   }
 `;
 
-function NebulaParticles({ onHold, aura = false }: { onHold: (holding: boolean) => void; aura?: boolean }) {
+function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
   const uniforms = useMemo(
     () => ({
@@ -111,23 +111,22 @@ function NebulaParticles({ onHold, aura = false }: { onHold: (holding: boolean) 
   const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    const tl = gsap.timeline();
-    tl.to(uniforms.uExpand, {
+    gsap.to(uniforms.uExpand, {
       value: aura ? 2.5 : 1.2,
       duration: aura ? 6 : 4,
       ease: "power3.out",
-    }).to(
-      uniforms.uExplosion,
-      {
-        value: 0.5,
-        duration: 1.5,
-        yoyo: true,
-        repeat: 1,
-        ease: "power2.inOut",
-      },
-      1.5
-    );
+    });
   }, [uniforms, aura]);
+
+  useFrame((state) => {
+    uniforms.uTime.value = state.clock.elapsedTime;
+    uniforms.uExplosion.value = explosion;
+
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y += 0.0005 + mouse.current.x * 0.0008;
+      pointsRef.current.rotation.x += 0.0003 + mouse.current.y * 0.0005;
+    }
+  });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -137,14 +136,6 @@ function NebulaParticles({ onHold, aura = false }: { onHold: (holding: boolean) 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
-
-  useFrame((state) => {
-    uniforms.uTime.value = state.clock.elapsedTime;
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y += 0.0005 + mouse.current.x * 0.0008;
-      pointsRef.current.rotation.x += 0.0003 + mouse.current.y * 0.0005;
-    }
-  });
 
   const particles = useMemo(() => {
     const count = aura ? 9000 : 18000;
@@ -184,33 +175,143 @@ function NebulaParticles({ onHold, aura = false }: { onHold: (holding: boolean) 
   );
 }
 
-function ReactiveCamera() {
+// 🎥 Kamera z ciekawymi przejściami
+function ReactiveCamera({ explosion }: { explosion: number }) {
   const { camera } = useThree();
   const startZ = useRef(camera.position.z);
+  const timeRef = useRef(0);
 
-  const handleHold = (holding: boolean) => {
+  // Reakcja na eksplozję
+  useEffect(() => {
     gsap.to(camera.position, {
-      z: holding ? startZ.current + 3 : startZ.current,
-      duration: 0.6,
+      z: startZ.current + explosion * 3,
+      duration: 0.4,
       ease: "power2.inOut",
     });
-  };
+  }, [explosion]);
+
+  // Stały dryf (oddech mgławicy)
+  useFrame(() => {
+    timeRef.current += 0.002;
+    camera.lookAt(0, 0, 0);
+  });
+
+  // 🔄 Dynamiczne przejścia kamery
+  useEffect(() => {
+    let active = true;
+
+    const loop = () => {
+      if (!active) return;
+
+      const transition = Math.floor(Math.random() * 3);
+      const delay = 4000 + Math.random() * 3000;
+
+      if (transition === 0) {
+        // 🌌 Orbitalny obrót
+        gsap.to(camera.position, {
+          x: Math.sin(Math.random() * Math.PI * 2) * 4,
+          y: Math.cos(Math.random() * Math.PI) * 2,
+          z: startZ.current - 2 - Math.random() * 2,
+          duration: 3.5,
+          ease: "power3.inOut",
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      } else if (transition === 1) {
+        // 🚀 Dynamiczny przelot do środka mgławicy
+        gsap.to(camera.position, {
+          z: startZ.current - 6,
+          x: (Math.random() - 0.5) * 3,
+          y: (Math.random() - 0.5) * 2,
+          duration: 2.2,
+          ease: "power4.inOut",
+          yoyo: true,
+          repeat: 1,
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      } else if (transition === 2) {
+        // 🎬 Cinematic pan + tilt
+        gsap.to(camera.rotation, {
+          x: (Math.random() - 0.5) * 0.3,
+          y: (Math.random() - 0.5) * 0.3,
+          z: (Math.random() - 0.5) * 0.2,
+          duration: 2.5,
+          ease: "sine.inOut",
+        });
+        gsap.to(camera.position, {
+          x: (Math.random() - 0.5) * 3,
+          y: (Math.random() - 0.5) * 2,
+          duration: 2.5,
+          ease: "power2.inOut",
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      }
+
+      setTimeout(loop, delay);
+    };
+
+    const timer = setTimeout(loop, 3000);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <>
-      <NebulaParticles onHold={handleHold} />
-      <NebulaParticles onHold={handleHold} aura /> {/* 🌫️ Aura */}
+      <NebulaParticles explosion={explosion} />
+      <NebulaParticles explosion={explosion} aura />
     </>
   );
 }
 
 export default function NebulaScene() {
+  const [explosion, setExplosion] = useState(0);
+
+  const handleHoldStart = () => {
+    const state = { value: explosion };
+    gsap.to(state, {
+      value: 1,
+      duration: 0.5,
+      ease: "power2.out",
+      onUpdate: () => setExplosion(state.value),
+    });
+  };
+
+  const handleHoldEnd = () => {
+    const state = { value: explosion };
+    gsap.to(state, {
+      value: 0,
+      duration: 0.8,
+      ease: "power2.inOut",
+      onUpdate: () => setExplosion(state.value),
+    });
+  };
+
   return (
-    <div className="relative w-full h-screen bg-black">
-      <div className="fixed w-full h-full z-10 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 15] }}>
-          <ReactiveCamera />
+    <div className="relative w-full h-screen bg-black overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
+          <ReactiveCamera explosion={explosion} />
         </Canvas>
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center space-y-6">
+<h1 className="text-7xl font-[HyperBlob] text-white/10 glass-heading">
+  FRAYMWEB
+</h1>
+
+        <p className="text-gray-300">Crafting cosmic digital experiences</p>
+
+        <button
+          className="px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/20 transition-all duration-300 active:scale-95"
+          onMouseDown={handleHoldStart}
+          onMouseUp={handleHoldEnd}
+          onMouseLeave={handleHoldEnd}
+          onTouchStart={handleHoldStart}
+          onTouchEnd={handleHoldEnd}
+        >
+          Przytrzymaj, by eksplodować 💥
+        </button>
       </div>
     </div>
   );

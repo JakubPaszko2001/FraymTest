@@ -47,7 +47,7 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
   }, [isOpen]);
 
   return (
-    <div className="border-b border-gray-700 overflow-hidden">
+    <div className="border-b border-gray-700 overflow-hidden !z-100">
       <button
         onClick={onToggle}
         className="w-full flex justify-between items-center py-4 px-4 text-white font-extrabold text-lg uppercase tracking-wide"

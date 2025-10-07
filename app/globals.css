@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
 }
 
 @theme inline {
@@ -14,9 +14,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #000000;
     --foreground: #ededed;
   }
+}
+
+@font-face {
+  font-family: "HyperBlob";
+  src: url("/fonts/hyperblob2.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 body {
