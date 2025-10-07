@@ -2,14 +2,15 @@
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect } from "react";
+import gsap from "gsap";
 
-// === 🔹 Vertex Shader z 3D noise ===
 const vertexShader = `
   uniform float uTime;
+  uniform float uExplosion;
   varying float vNoise;
   varying vec3 vColor;
 
-  // Simplex noise 3D
+  // --- Simplex noise 3D ---
   vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
   vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
   vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -66,19 +67,27 @@ const vertexShader = `
 
   void main() {
     vec3 pos = position;
-
     float noise = snoise(pos * 0.7 + uTime * 0.2);
-    pos += normalize(pos) * noise * 0.5;
+
+    // 💥 Silniejszy, ale płynniejszy wybuch
+    float explosionStrength = uExplosion * 3.0;
+    pos += normalize(pos) * (noise * 0.8 + explosionStrength * 1.5);
+    pos *= (1.0 + uExplosion * 1.8);
 
     vNoise = noise;
-    vColor = vec3(0.5 + noise * 0.3, 0.4 + noise * 0.2, 1.0);
+
+    // 🎨 Kolor przechodzi z niebieskiego w biały
+    vColor = mix(
+      vec3(0.4 + noise * 0.2, 0.5 + noise * 0.3, 1.0),
+      vec3(1.0, 1.0, 1.0),
+      uExplosion
+    );
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-    gl_PointSize = 2.0;
+    gl_PointSize = 2.0 + uExplosion * 4.0;
   }
 `;
 
-// === 🔹 Fragment Shader ===
 const fragmentShader = `
   varying float vNoise;
   varying vec3 vColor;
@@ -86,21 +95,44 @@ const fragmentShader = `
   void main() {
     float d = length(gl_PointCoord - vec2(0.5));
     if (d > 0.5) discard;
-    vec3 color = vColor * (0.5 + vNoise * 0.5);
-    gl_FragColor = vec4(color, 0.85);
+    vec3 color = vColor * (0.7 + vNoise * 0.5);
+    gl_FragColor = vec4(color, 0.9);
   }
 `;
 
-// === 🔹 Particles ===
 function NebulaParticles() {
   const pointsRef = useRef<THREE.Points>(null);
-  const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uExplosion: { value: 0 },
+    }),
+    []
+  );
+
+  useEffect(() => {
+    let timeout: any;
+    const triggerExplosion = () => {
+      gsap.to(uniforms.uExplosion, {
+        value: 1,
+        duration: 1.2, // ⏳ spowolniony wybuch
+        ease: "power2.inOut", // płynniejsze wejście i wyjście
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => {
+          timeout = setTimeout(triggerExplosion, 3000 + Math.random() * 4000);
+        },
+      });
+    };
+    timeout = setTimeout(triggerExplosion, 2000);
+    return () => clearTimeout(timeout);
+  }, [uniforms]);
 
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
     if (pointsRef.current) {
-      pointsRef.current.rotation.y += 0.0008;
-      pointsRef.current.rotation.x += 0.0004;
+      pointsRef.current.rotation.y += 0.0006;
+      pointsRef.current.rotation.x += 0.0003;
     }
   });
 
@@ -126,7 +158,6 @@ function NebulaParticles() {
           array={particles}
           count={particles.length / 3}
           itemSize={3}
-          args={[particles, 3]}
         />
       </bufferGeometry>
       <shaderMaterial
@@ -141,31 +172,21 @@ function NebulaParticles() {
   );
 }
 
-// === 🔹 Kamera dopasowana odwrotnie (dalej na pionie) ===
 function ResponsiveCamera() {
   const { camera, size } = useThree();
-
   useEffect(() => {
     const aspect = size.width / size.height;
-
-    if (aspect < 0.75) {
-      // 📱 pionowy ekran (16:9) — ODDAL kamerę
-      camera.position.z = 13;
-    } else {
-      // 💻 poziomy ekran
-      camera.position.z = 8;
-    }
+    if (aspect < 0.75) camera.position.z = 13;
+    else camera.position.z = 8;
     camera.updateProjectionMatrix();
   }, [camera, size]);
-
   return null;
 }
 
-// === 🔹 Scena ===
 export default function NebulaScene() {
   return (
     <div className="w-full h-screen bg-black">
-      <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
+      <Canvas camera={{ position: [0, 0, 1] }}>
         <ResponsiveCamera />
         <NebulaParticles />
       </Canvas>
