@@ -111,7 +111,7 @@ function NebulaParticles() {
   );
 
   useEffect(() => {
-    let timeout: any;
+    let timeout: ReturnType<typeof setTimeout>;
     const triggerExplosion = () => {
       gsap.to(uniforms.uExplosion, {
         value: 1,
