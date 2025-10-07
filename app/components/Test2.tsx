@@ -158,6 +158,7 @@ function NebulaParticles() {
           array={particles}
           count={particles.length / 3}
           itemSize={3}
+          args={[particles, 3]}
         />
       </bufferGeometry>
       <shaderMaterial
