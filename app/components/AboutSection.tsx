@@ -142,7 +142,7 @@ export default function AboutSection() {
       {/* 🔹 Tekst z animacją char */}
       <p
         ref={textRef}
-        className="fade-text text-2xl font-extrabold leading-snug text-white max-w-4xl uppercase"
+        className="fade-text text-2xl font-extrabold leading-snug text-white max-w-4xl uppercase z-20"
       >
         Jesteśmy{" "}
         <span>innowacyjną</span> firmą wykorzystującą najnowsze technologie oraz

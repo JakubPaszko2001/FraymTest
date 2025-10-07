@@ -1,13 +1,13 @@
 "use client";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Text } from "@react-three/drei";
 import { useRef, useMemo, useEffect } from "react";
 import gsap from "gsap";
 
 const vertexShader = `
   uniform float uTime;
   uniform float uExplosion;
+  uniform float uExpand;
   varying float vNoise;
   varying vec3 vColor;
 
@@ -66,16 +66,16 @@ const vertexShader = `
   }
 
   void main() {
-    vec3 pos = position;
+    vec3 pos = position * uExpand;
     float noise = snoise(pos * 0.7 + uTime * 0.2);
-
     float explosionStrength = uExplosion * 3.0;
+
     pos += normalize(pos) * (noise * 0.8 + explosionStrength * 1.5);
     pos *= (1.0 + uExplosion * 1.8);
 
     vNoise = noise;
     vColor = mix(
-      vec3(0.4 + noise * 0.2, 0.5 + noise * 0.3, 1.0),
+      vec3(0.3 + noise * 0.3, 0.5 + noise * 0.4, 1.0),
       vec3(1.0, 1.0, 1.0),
       uExplosion
     );
@@ -99,30 +99,68 @@ const fragmentShader = `
 
 function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
   const pointsRef = useRef<THREE.Points>(null);
-  const uniforms = useMemo(() => ({
-    uTime: { value: 0 },
-    uExplosion: { value: 0 },
-  }), []);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uExplosion: { value: 0 },
+      uExpand: { value: 0.1 }, // 🔹 start: bardzo mała mgławica
+    }),
+    []
+  );
 
+  const mouse = useRef({ x: 0, y: 0 });
+
+  // ✨ Animacja startowa — rozrost z małej kulki
+  useEffect(() => {
+    const tl = gsap.timeline();
+    tl.to(uniforms.uExpand, {
+      value: 1.2,
+      duration: 4,
+      ease: "power3.out",
+    })
+      .to(
+        uniforms.uExplosion,
+        {
+          value: 0.5,
+          duration: 1.5,
+          yoyo: true,
+          repeat: 1,
+          ease: "power2.inOut",
+        },
+        1.5
+      );
+  }, [uniforms]);
+
+  // 🧭 Ruch za kursorem
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouse.current.y = (e.clientY / window.innerHeight - 0.5) * -2;
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // 🔁 Animacja w pętli
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
+
     if (pointsRef.current) {
-      pointsRef.current.rotation.y += 0.0006;
-      pointsRef.current.rotation.x += 0.0003;
+      pointsRef.current.rotation.y += 0.0005 + mouse.current.x * 0.0008;
+      pointsRef.current.rotation.x += 0.0003 + mouse.current.y * 0.0005;
     }
   });
 
-  // 🔹 Wybuch przy kliknięciu / przytrzymaniu
+  // 💥 Eksplozja przy kliknięciu
   useEffect(() => {
     const startHold = () => {
       gsap.to(uniforms.uExplosion, {
         value: 1,
-        duration: 0.6,
+        duration: 0.5,
         ease: "power2.out",
       });
       onHold(true);
     };
-
     const endHold = () => {
       gsap.to(uniforms.uExplosion, {
         value: 0,
@@ -145,6 +183,7 @@ function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
     };
   }, [onHold, uniforms]);
 
+  // 🌌 Pozycje cząsteczek
   const particles = useMemo(() => {
     const count = 18000;
     const positions = new Float32Array(count * 3);
@@ -160,7 +199,7 @@ function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
   }, []);
 
   return (
-    <points ref={pointsRef} scale={[1.2, 1.2, 1.2]}>
+    <points ref={pointsRef}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -186,7 +225,6 @@ function ReactiveCamera() {
   const { camera } = useThree();
   const startZ = useRef(camera.position.z);
 
-  // 🔹 Zoom działa tylko, gdy użytkownik trzyma
   const handleHold = (holding: boolean) => {
     gsap.to(camera.position, {
       z: holding ? startZ.current + 3 : startZ.current,
@@ -200,21 +238,12 @@ function ReactiveCamera() {
 
 export default function NebulaScene() {
   return (
-    <div className="w-full h-screen bg-black">
-      <Canvas camera={{ position: [0, 0, 15] }}>
-        <ReactiveCamera />
-        <Text
-          font={"/fonts/hyperblob2.otf"}
-          position={[0, 0, -1]}
-          fontSize={1.4}
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-          sdfGlyphSize={256}
-        >
-          FRAYMWEB
-        </Text>
-      </Canvas>
+    <div className="relative w-full h-screen bg-black">
+      <div className="fixed w-full h-full z-10 pointer-events-none">
+        <Canvas camera={{ position: [0, 0, 15] }}>
+          <ReactiveCamera />
+        </Canvas>
+      </div>
     </div>
   );
 }
