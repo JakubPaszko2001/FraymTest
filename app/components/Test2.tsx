@@ -97,41 +97,38 @@ const fragmentShader = `
   }
 `;
 
-function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
+function NebulaParticles({ onHold, aura = false }: { onHold: (holding: boolean) => void; aura?: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
       uExplosion: { value: 0 },
-      uExpand: { value: 0.1 }, // 🔹 start: bardzo mała mgławica
+      uExpand: { value: 0.1 },
     }),
     []
   );
 
   const mouse = useRef({ x: 0, y: 0 });
 
-  // ✨ Animacja startowa — rozrost z małej kulki
   useEffect(() => {
     const tl = gsap.timeline();
     tl.to(uniforms.uExpand, {
-      value: 1.2,
-      duration: 4,
+      value: aura ? 2.5 : 1.2,
+      duration: aura ? 6 : 4,
       ease: "power3.out",
-    })
-      .to(
-        uniforms.uExplosion,
-        {
-          value: 0.5,
-          duration: 1.5,
-          yoyo: true,
-          repeat: 1,
-          ease: "power2.inOut",
-        },
-        1.5
-      );
-  }, [uniforms]);
+    }).to(
+      uniforms.uExplosion,
+      {
+        value: 0.5,
+        duration: 1.5,
+        yoyo: true,
+        repeat: 1,
+        ease: "power2.inOut",
+      },
+      1.5
+    );
+  }, [uniforms, aura]);
 
-  // 🧭 Ruch za kursorem
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -141,54 +138,19 @@ function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // 🔁 Animacja w pętli
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
-
     if (pointsRef.current) {
       pointsRef.current.rotation.y += 0.0005 + mouse.current.x * 0.0008;
       pointsRef.current.rotation.x += 0.0003 + mouse.current.y * 0.0005;
     }
   });
 
-  // 💥 Eksplozja przy kliknięciu
-  useEffect(() => {
-    const startHold = () => {
-      gsap.to(uniforms.uExplosion, {
-        value: 1,
-        duration: 0.5,
-        ease: "power2.out",
-      });
-      onHold(true);
-    };
-    const endHold = () => {
-      gsap.to(uniforms.uExplosion, {
-        value: 0,
-        duration: 0.8,
-        ease: "power2.inOut",
-      });
-      onHold(false);
-    };
-
-    window.addEventListener("mousedown", startHold);
-    window.addEventListener("mouseup", endHold);
-    window.addEventListener("touchstart", startHold);
-    window.addEventListener("touchend", endHold);
-
-    return () => {
-      window.removeEventListener("mousedown", startHold);
-      window.removeEventListener("mouseup", endHold);
-      window.removeEventListener("touchstart", startHold);
-      window.removeEventListener("touchend", endHold);
-    };
-  }, [onHold, uniforms]);
-
-  // 🌌 Pozycje cząsteczek
   const particles = useMemo(() => {
-    const count = 18000;
+    const count = aura ? 9000 : 18000;
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i += 3) {
-      const r = 2.8 + Math.random() * 0.6;
+      const r = aura ? 3.5 + Math.random() * 2.5 : 2.8 + Math.random() * 0.6;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       positions[i] = r * Math.sin(phi) * Math.cos(theta);
@@ -196,7 +158,7 @@ function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
       positions[i + 2] = r * Math.cos(phi);
     }
     return positions;
-  }, []);
+  }, [aura]);
 
   return (
     <points ref={pointsRef}>
@@ -206,7 +168,6 @@ function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
           array={particles}
           count={particles.length / 3}
           itemSize={3}
-          args={[particles, 3]}
         />
       </bufferGeometry>
       <shaderMaterial
@@ -216,6 +177,7 @@ function NebulaParticles({ onHold }: { onHold: (holding: boolean) => void }) {
         transparent
         blending={THREE.AdditiveBlending}
         depthWrite={false}
+        opacity={aura ? 0.25 : 1.0}
       />
     </points>
   );
@@ -233,7 +195,12 @@ function ReactiveCamera() {
     });
   };
 
-  return <NebulaParticles onHold={handleHold} />;
+  return (
+    <>
+      <NebulaParticles onHold={handleHold} />
+      <NebulaParticles onHold={handleHold} aura /> {/* 🌫️ Aura */}
+    </>
+  );
 }
 
 export default function NebulaScene() {
