@@ -119,7 +119,6 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
     uniforms.uExplosion.value = explosion;
-
     if (pointsRef.current) {
       pointsRef.current.rotation.y += 0.0005;
       pointsRef.current.rotation.x += 0.0003;
@@ -148,7 +147,6 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
           array={particles}
           count={particles.length / 3}
           itemSize={3}
-          args={[particles, 3]}
         />
       </bufferGeometry>
       <shaderMaterial
@@ -176,65 +174,7 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
     });
   }, [explosion]);
 
-  useFrame(() => {
-    camera.lookAt(0, 0, 0);
-  });
-
-  useEffect(() => {
-    let active = true;
-
-    const loop = () => {
-      if (!active) return;
-
-      const transition = Math.floor(Math.random() * 3);
-      const delay = 4000 + Math.random() * 3000;
-
-      if (transition === 0) {
-        gsap.to(camera.position, {
-          x: Math.sin(Math.random() * Math.PI * 2) * 4,
-          y: Math.cos(Math.random() * Math.PI) * 2,
-          z: startZ.current - 2 - Math.random() * 2,
-          duration: 3.5,
-          ease: "power3.inOut",
-          onUpdate: () => camera.lookAt(0, 0, 0),
-        });
-      } else if (transition === 1) {
-        gsap.to(camera.position, {
-          z: startZ.current - 6,
-          x: (Math.random() - 0.5) * 3,
-          y: (Math.random() - 0.5) * 2,
-          duration: 2.2,
-          ease: "power4.inOut",
-          yoyo: true,
-          repeat: 1,
-          onUpdate: () => camera.lookAt(0, 0, 0),
-        });
-      } else if (transition === 2) {
-        gsap.to(camera.rotation, {
-          x: (Math.random() - 0.5) * 0.3,
-          y: (Math.random() - 0.5) * 0.3,
-          z: (Math.random() - 0.5) * 0.2,
-          duration: 2.5,
-          ease: "sine.inOut",
-        });
-        gsap.to(camera.position, {
-          x: (Math.random() - 0.5) * 3,
-          y: (Math.random() - 0.5) * 2,
-          duration: 2.5,
-          ease: "power2.inOut",
-          onUpdate: () => camera.lookAt(0, 0, 0),
-        });
-      }
-
-      setTimeout(loop, delay);
-    };
-
-    const timer = setTimeout(loop, 3000);
-    return () => {
-      active = false;
-      clearTimeout(timer);
-    };
-  }, []);
+  useFrame(() => camera.lookAt(0, 0, 0));
 
   return (
     <>
@@ -247,6 +187,7 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
 
+  // 🔧 Ustawiamy stałą wysokość ekranu (działa na mobile)
   useEffect(() => {
     const setFixedHeight = () => {
       const vh = window.innerHeight * 0.01;
@@ -258,22 +199,20 @@ export default function NebulaScene() {
   }, []);
 
   const handleHoldStart = () => {
-    const state = { value: explosion };
-    gsap.to(state, {
+    gsap.to({ value: explosion }, {
       value: 1,
       duration: 0.5,
       ease: "power2.out",
-      onUpdate: () => setExplosion(state.value),
+      onUpdate: (t) => setExplosion(t.targets()[0].value),
     });
   };
 
   const handleHoldEnd = () => {
-    const state = { value: explosion };
-    gsap.to(state, {
+    gsap.to({ value: explosion }, {
       value: 0,
       duration: 0.8,
       ease: "power2.inOut",
-      onUpdate: () => setExplosion(state.value),
+      onUpdate: (t) => setExplosion(t.targets()[0].value),
     });
   };
 
@@ -282,12 +221,14 @@ export default function NebulaScene() {
       className="relative w-full bg-black overflow-hidden"
       style={{ height: "calc(var(--real-vh, 1vh) * 100)" }}
     >
+      {/* 🚀 Canvas w tle — fixed, nie przewija się */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />
         </Canvas>
       </div>
 
+      {/* 🌌 Treść na środku */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center space-y-6">
         <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
           FRAYMWEB
