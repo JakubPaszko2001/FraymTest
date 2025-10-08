@@ -10,7 +10,7 @@ import Test2 from './components/Test2';
 export default function Page() {
   return (
     <>
-      <div className="relative w-screen h-[100lvh]">
+      <div className="relative w-screen h-[100dvh]">
         <Test2 />
         {/* DiagonalStripes jest absolute w środku, więc tu nic nie dodawaj */}
         {/* <DiagonalStripes
