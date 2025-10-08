@@ -298,7 +298,7 @@ export default function NebulaScene() {
           onTouchStart={handleHoldStart}
           onTouchEnd={handleHoldEnd}
         >
-          Przytrzymaj, by eksplodować 💥
+          Przytrzymaj, by eksplodowac 💥
         </button>
       </div>
     </div>
