@@ -247,16 +247,6 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
 
-  useEffect(() => {
-    const setFixedHeight = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty("--real-vh", `${vh}px`);
-    };
-    setFixedHeight();
-    window.addEventListener("resize", setFixedHeight);
-    return () => window.removeEventListener("resize", setFixedHeight);
-  }, []);
-
   const handleHoldStart = () => {
     const state = { value: explosion };
     gsap.to(state, {
@@ -280,7 +270,10 @@ export default function NebulaScene() {
   return (
     <div
       className="relative w-full bg-black overflow-hidden"
-      style={{ height: "calc(var(--real-vh, 1vh) * 100)" }}
+      style={{
+        height: "100lvh",
+        minHeight: "100svh",
+      }}
     >
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
