@@ -116,7 +116,6 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
     });
   }, [uniforms, aura]);
 
-  // 🌌 Delikatny obrót — bez podążania za myszką
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
     uniforms.uExplosion.value = explosion;
@@ -165,7 +164,6 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
   );
 }
 
-// 🎥 Kamera z animacjami
 function ReactiveCamera({ explosion }: { explosion: number }) {
   const { camera } = useThree();
   const startZ = useRef(camera.position.z);
@@ -182,7 +180,6 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
     camera.lookAt(0, 0, 0);
   });
 
-  // 🔄 Losowe cinematic ruchy
   useEffect(() => {
     let active = true;
 
@@ -250,6 +247,16 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
 
+  useEffect(() => {
+    const setFixedHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--real-vh", `${vh}px`);
+    };
+    setFixedHeight();
+    window.addEventListener("resize", setFixedHeight);
+    return () => window.removeEventListener("resize", setFixedHeight);
+  }, []);
+
   const handleHoldStart = () => {
     const state = { value: explosion };
     gsap.to(state, {
@@ -271,7 +278,10 @@ export default function NebulaScene() {
   };
 
   return (
-    <div className="relative w-full h-[100lvh] bg-black overflow-hidden">
+    <div
+      className="relative w-full bg-black overflow-hidden"
+      style={{ height: "calc(var(--real-vh, 1vh) * 100)" }}
+    >
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />
