@@ -191,15 +191,6 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
 
-  // 🔒 ZABLOKOWANIE SCROLLA
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
   const handleHoldStart = () => {
     const state = { value: explosion };
     gsap.to(state, {
@@ -228,7 +219,15 @@ export default function NebulaScene() {
         minHeight: "100svh",
       }}
     >
-      <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
+      {/* izolowany kontekst Canvas */}
+      <div
+        className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"
+        style={{
+          transform: "translate3d(0,0,0)",
+          contain: "strict",
+          willChange: "transform",
+        }}
+      >
         <Canvas className="w-full h-full" camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />
         </Canvas>
