@@ -296,10 +296,12 @@ export default function NebulaScene() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center space-y-6">
-<h1 className="text-7xl font-[HyperBlob] text-white/10 glass-heading">
+<h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
   FRAYMWEB
 </h1>
-
+<h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
+  fraymweb
+</h1>
         <p className="text-gray-300">Crafting cosmic digital experiences</p>
 
         <button
