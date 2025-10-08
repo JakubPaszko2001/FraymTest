@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect, useState } from "react";
 import gsap from "gsap";
 
+// === SHADERS ===
 const vertexShader = `
   uniform float uTime;
   uniform float uExplosion;
@@ -97,6 +98,7 @@ const fragmentShader = `
   }
 `;
 
+// === PARTICLES ===
 function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
   const uniforms = useMemo(
@@ -119,7 +121,6 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
     uniforms.uExplosion.value = explosion;
-
     if (pointsRef.current) {
       pointsRef.current.rotation.y += 0.0005;
       pointsRef.current.rotation.x += 0.0003;
@@ -164,6 +165,7 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
   );
 }
 
+// === CAMERA ===
 function ReactiveCamera({ explosion }: { explosion: number }) {
   const { camera } = useThree();
   const startZ = useRef(camera.position.z);
@@ -176,9 +178,7 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
     });
   }, [explosion]);
 
-  useFrame(() => {
-    camera.lookAt(0, 0, 0);
-  });
+  useFrame(() => camera.lookAt(0, 0, 0));
 
   return (
     <>
@@ -188,24 +188,25 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
   );
 }
 
+// === MAIN COMPONENT ===
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
   const [height, setHeight] = useState<number | null>(null);
 
-  // 🔧 Ustawiamy stałą wysokość na podstawie rzeczywistego ekranu
+  // ✅ Używamy visualViewport zamiast innerHeight
   useEffect(() => {
-    const setRealHeight = () => {
-      const h = window.innerHeight;
-      console.log("Real height:", h);
-      setHeight(h);
+    const setStableHeight = () => {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      setHeight(vh);
     };
-    setRealHeight();
 
-    window.addEventListener("orientationchange", setRealHeight);
-    window.addEventListener("resize", setRealHeight);
+    setStableHeight();
+    window.visualViewport?.addEventListener("resize", setStableHeight);
+    window.addEventListener("orientationchange", setStableHeight);
+
     return () => {
-      window.removeEventListener("orientationchange", setRealHeight);
-      window.removeEventListener("resize", setRealHeight);
+      window.visualViewport?.removeEventListener("resize", setStableHeight);
+      window.removeEventListener("orientationchange", setStableHeight);
     };
   }, []);
 
@@ -233,7 +234,7 @@ export default function NebulaScene() {
     <div
       className="relative w-full bg-black overflow-hidden"
       style={{
-        height: height ? `${height}px` : "100vh", // 👈 ustalamy sztywną wysokość w px
+        height: height ? `${height}px` : "100vh", // 👈 sztywna wysokość viewportu
       }}
     >
       <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
@@ -243,9 +244,7 @@ export default function NebulaScene() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center space-y-6">
-        <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
-          FRAYMWEB
-        </h1>
+        <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">FRAYMWEB</h1>
         <p className="text-gray-300">Crafting cosmic digital experiences</p>
 
         <button
