@@ -190,6 +190,24 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
 
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
+  const [height, setHeight] = useState<number | null>(null);
+
+  // 🔧 Ustawiamy stałą wysokość na podstawie rzeczywistego ekranu
+  useEffect(() => {
+    const setRealHeight = () => {
+      const h = window.innerHeight;
+      console.log("Real height:", h);
+      setHeight(h);
+    };
+    setRealHeight();
+
+    window.addEventListener("orientationchange", setRealHeight);
+    window.addEventListener("resize", setRealHeight);
+    return () => {
+      window.removeEventListener("orientationchange", setRealHeight);
+      window.removeEventListener("resize", setRealHeight);
+    };
+  }, []);
 
   const handleHoldStart = () => {
     const state = { value: explosion };
@@ -215,19 +233,10 @@ export default function NebulaScene() {
     <div
       className="relative w-full bg-black overflow-hidden"
       style={{
-        height: "100lvh",
-        minHeight: "100svh",
+        height: height ? `${height}px` : "100vh", // 👈 ustalamy sztywną wysokość w px
       }}
     >
-      {/* izolowany kontekst Canvas */}
-      <div
-        className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"
-        style={{
-          transform: "translate3d(0,0,0)",
-          contain: "strict",
-          willChange: "transform",
-        }}
-      >
+      <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
         <Canvas className="w-full h-full" camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />
         </Canvas>
