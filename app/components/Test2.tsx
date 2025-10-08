@@ -271,7 +271,7 @@ export default function NebulaScene() {
   };
 
   return (
-    <div className="relative w-full h-[100svh] bg-black overflow-hidden">
+    <div className="relative w-full h-[100lvh] bg-black overflow-hidden">
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />
