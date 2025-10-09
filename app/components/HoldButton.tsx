@@ -21,6 +21,14 @@ export default function HoldButton({ onHoldStart, onHoldEnd }: HoldButtonProps) 
       onMouseLeave={onHoldEnd}
       onTouchStart={onHoldStart}
       onTouchEnd={onHoldEnd}
+      style={{
+      WebkitUserSelect: "none",
+      userSelect: "none",
+      WebkitTouchCallout: "none",
+      WebkitTapHighlightColor: "transparent", // 🔥 to usuwa niebieski kwadrat
+      WebkitAppearance: "none", // dodatkowo usuwa domyślne efekty przycisku w iOS
+      outline: "none", // brak obramowania focus
+  }}
     >
       {/* Obracający się napis HOLD */}
       <div className="absolute inset-0 animate-spin-slow text-[12px] font-semibold text-gray-200 uppercase tracking-[3px] pointer-events-none select-none">
