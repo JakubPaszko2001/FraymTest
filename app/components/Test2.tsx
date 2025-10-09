@@ -247,6 +247,23 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
 
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+
+  // ✨ Animacja wejścia tekstu po animacji mgławicy
+  useEffect(() => {
+    const tl = gsap.timeline({ delay: 2.5 }); // po 3s od startu
+    tl.fromTo(
+      titleRef.current,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }
+    ).fromTo(
+      textRef.current,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" },
+      "-=0.6"
+    );
+  }, []);
 
   const handleHoldStart = () => {
     const state = { value: explosion };
@@ -269,23 +286,36 @@ export default function NebulaScene() {
   };
 
   return (
-    <section
-      className="relative w-full h-[100svh] bg-black overflow-hidden"
-    >
+    <section className="relative w-full h-[100svh] bg-black overflow-hidden">
+      {/* 🔘 Przycisk */}
       <div className="!z-50 absolute left-1/2 -translate-x-1/2 bottom-[calc(3svh)]">
         <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} />
       </div>
+
+      {/* 🌌 Canvas */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <Canvas style={{ display: "block", minHeight: "100svh", height: "100lvh", }} camera={{ position: [0, 0, 15], fov: 70 }}>
+        <Canvas
+          style={{ display: "block", minHeight: "100svh", height: "100lvh" }}
+          camera={{ position: [0, 0, 15], fov: 70 }}
+        >
           <ReactiveCamera explosion={explosion} />
         </Canvas>
       </div>
 
+      {/* 🪐 Tekst */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
-        <h1 className="text-1xl font-[HyperBlob] mb-2">
+        <h1
+          ref={titleRef}
+          className="text-1xl font-[HyperBlob] mb-2 opacity-0"
+        >
           FRAYMWEB
         </h1>
-        <p className="text-gray-300 font-[HyperBlob] text-5xl uppercase">Crafting <br /> Cosmic <br /> Digital <br /> Visions</p>
+        <p
+          ref={textRef}
+          className="text-gray-300 font-[HyperBlob] text-5xl uppercase opacity-0"
+        >
+          Crafting <br /> Cosmic <br /> Digital <br /> Visions
+        </p>
       </div>
     </section>
   );
