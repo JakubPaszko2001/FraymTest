@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect, useState } from "react";
 import gsap from "gsap";
+import HoldButton from "./HoldButton";
 
 const vertexShader = `
   uniform float uTime;
@@ -268,9 +269,10 @@ export default function NebulaScene() {
   };
 
   return (
-    <div
+    <section
       className="relative w-full h-[100vh] bg-black overflow-hidden"
     >
+        <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} />
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas style={{ display: "block", minHeight: "100svh", height: "100lvh", }} camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />
@@ -282,18 +284,7 @@ export default function NebulaScene() {
           FRAYMWEB
         </h1>
         <p className="text-gray-300">Crafting cosmic digital experiences</p>
-
-        <button
-          className="px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/20 transition-all duration-300 active:scale-95"
-          onMouseDown={handleHoldStart}
-          onMouseUp={handleHoldEnd}
-          onMouseLeave={handleHoldEnd}
-          onTouchStart={handleHoldStart}
-          onTouchEnd={handleHoldEnd}
-        >
-          Przytrzymaj, by eksplodowac 💥
-        </button>
       </div>
-    </div>
+    </section>
   );
 }
