@@ -272,7 +272,9 @@ export default function NebulaScene() {
     <section
       className="relative w-full h-[100svh] bg-black overflow-hidden"
     >
+      <div className="!z-50 absolute left-1/2 -translate-x-1/2 bottom-[calc(3svh)]">
         <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} />
+      </div>
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas style={{ display: "block", minHeight: "100svh", height: "100lvh", }} camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />

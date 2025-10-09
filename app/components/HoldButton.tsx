@@ -15,7 +15,7 @@ type HoldButtonProps = {
 export default function HoldButton({ onHoldStart, onHoldEnd }: HoldButtonProps) {
   return (
     <button
-      className="!z-50 absolute left-1/2 -translate-x-1/2 bottom-[110px] flex items-center justify-center w-24 h-24 rounded-full hover:bg-white/20 transition-all duration-300 active:scale-95 group overflow-hidden"
+      className="flex items-center justify-center w-24 h-24 rounded-full hover:bg-white/20 transition-all duration-300 active:scale-95 group overflow-hidden"
       onMouseDown={onHoldStart}
       onMouseUp={onHoldEnd}
       onMouseLeave={onHoldEnd}
