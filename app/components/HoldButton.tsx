@@ -15,20 +15,21 @@ type HoldButtonProps = {
 export default function HoldButton({ onHoldStart, onHoldEnd }: HoldButtonProps) {
   return (
     <button
-      className="!z-50 absolute bottom-[32px] left-1/2 -translate-x-1/2 flex items-center justify-center w-24 h-24 rounded-full hover:bg-white/20 transition-all duration-300 active:scale-95 group overflow-hidden"
+      className="!z-50 absolute left-1/2 -translate-x-1/2 flex items-center justify-center w-24 h-24 rounded-full hover:bg-white/20 transition-all duration-300 active:scale-95 group overflow-hidden"
       onMouseDown={onHoldStart}
       onMouseUp={onHoldEnd}
       onMouseLeave={onHoldEnd}
       onTouchStart={onHoldStart}
       onTouchEnd={onHoldEnd}
       style={{
-      WebkitUserSelect: "none",
-      userSelect: "none",
-      WebkitTouchCallout: "none",
-      WebkitTapHighlightColor: "transparent", // 🔥 to usuwa niebieski kwadrat
-      WebkitAppearance: "none", // dodatkowo usuwa domyślne efekty przycisku w iOS
-      outline: "none", // brak obramowania focus
-  }}
+        bottom: 'calc(32px + 0svh)',
+        WebkitUserSelect: "none",
+        userSelect: "none",
+        WebkitTouchCallout: "none",
+        WebkitTapHighlightColor: "transparent", // 🔥 to usuwa niebieski kwadrat
+        WebkitAppearance: "none", // dodatkowo usuwa domyślne efekty przycisku w iOS
+        outline: "none", // brak obramowania focus
+      }}
     >
       {/* Obracający się napis HOLD */}
       <div className="absolute inset-0 animate-spin-slow text-[12px] font-semibold text-gray-200 uppercase tracking-[3px] pointer-events-none select-none">
