@@ -22,7 +22,7 @@ export default function HoldButton({ onHoldStart, onHoldEnd }: HoldButtonProps) 
       onTouchStart={onHoldStart}
       onTouchEnd={onHoldEnd}
       style={{
-        bottom: 'calc(32px + 0svh)',
+        bottom: 'calc(32px + env(safe-area-inset-bottom, 0px))',
         WebkitUserSelect: "none",
         userSelect: "none",
         WebkitTouchCallout: "none",
