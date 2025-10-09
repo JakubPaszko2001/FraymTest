@@ -56,7 +56,7 @@ export default function HoldButton({ onHoldStart, onHoldEnd }: HoldButtonProps) 
       />
 
       {/* Efekt poświaty */}
-      <span className="absolute inset-0 rounded-full bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-70 transition-all duration-500"></span>
+      <span className="absolute inset-0 rounded-full bg-white/20 blur-xl opacity-0 group-hover:opacity-70 transition-all duration-500"></span>
     </button>
   );
 }

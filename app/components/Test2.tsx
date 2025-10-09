@@ -270,7 +270,7 @@ export default function NebulaScene() {
 
   return (
     <section
-      className="relative w-full h-[100vh] bg-black overflow-hidden"
+      className="relative w-full h-[100svh] bg-black overflow-hidden"
     >
         <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} />
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -279,11 +279,11 @@ export default function NebulaScene() {
         </Canvas>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center space-y-6">
-        <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
+        <h1 className="text-1xl font-[HyperBlob] mb-2">
           FRAYMWEB
         </h1>
-        <p className="text-gray-300">Crafting cosmic digital experiences</p>
+        <p className="text-gray-300 font-[HyperBlob] text-5xl uppercase">Crafting <br /> Cosmic <br /> Digital <br /> Visions</p>
       </div>
     </section>
   );
