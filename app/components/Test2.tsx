@@ -269,7 +269,7 @@ export default function NebulaScene() {
 
   return (
     <div
-      className="relative w-full h-[100svh] bg-black overflow-hidden"
+      className="relative w-full h-[840px] bg-black overflow-hidden"
     >
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
@@ -280,9 +280,6 @@ export default function NebulaScene() {
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center space-y-6">
         <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
           FRAYMWEB
-        </h1>
-        <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
-          fraymweb
         </h1>
         <p className="text-gray-300">Crafting cosmic digital experiences</p>
 
