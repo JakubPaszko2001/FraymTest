@@ -275,6 +275,7 @@ export default function NebulaScene() {
         <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
           {/* <ReactiveCamera explosion={explosion} /> */}
            <NebulaParticles explosion={explosion} />
+           <NebulaParticles explosion={explosion} aura />
         </Canvas>
       </div>
 
