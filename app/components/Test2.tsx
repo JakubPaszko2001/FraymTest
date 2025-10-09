@@ -269,7 +269,7 @@ export default function NebulaScene() {
 
   return (
     <div
-      className="relative w-full h-[840px] bg-black overflow-hidden"
+      className="relative w-full h-[800px] bg-black overflow-hidden"
     >
       <div className="fixed inset-0 pointer-events-none z-0">
         <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
