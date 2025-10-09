@@ -4,7 +4,6 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect, useState } from "react";
 import gsap from "gsap";
 
-// === SHADERS ===
 const vertexShader = `
   uniform float uTime;
   uniform float uExplosion;
@@ -98,7 +97,6 @@ const fragmentShader = `
   }
 `;
 
-// === PARTICLES ===
 function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
   const uniforms = useMemo(
@@ -121,6 +119,7 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
   useFrame((state) => {
     uniforms.uTime.value = state.clock.elapsedTime;
     uniforms.uExplosion.value = explosion;
+
     if (pointsRef.current) {
       pointsRef.current.rotation.y += 0.0005;
       pointsRef.current.rotation.x += 0.0003;
@@ -165,7 +164,6 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
   );
 }
 
-// === CAMERA ===
 function ReactiveCamera({ explosion }: { explosion: number }) {
   const { camera } = useThree();
   const startZ = useRef(camera.position.z);
@@ -178,7 +176,65 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
     });
   }, [explosion]);
 
-  useFrame(() => camera.lookAt(0, 0, 0));
+  useFrame(() => {
+    camera.lookAt(0, 0, 0);
+  });
+
+  useEffect(() => {
+    let active = true;
+
+    const loop = () => {
+      if (!active) return;
+
+      const transition = Math.floor(Math.random() * 3);
+      const delay = 4000 + Math.random() * 3000;
+
+      if (transition === 0) {
+        gsap.to(camera.position, {
+          x: Math.sin(Math.random() * Math.PI * 2) * 4,
+          y: Math.cos(Math.random() * Math.PI) * 2,
+          z: startZ.current - 2 - Math.random() * 2,
+          duration: 3.5,
+          ease: "power3.inOut",
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      } else if (transition === 1) {
+        gsap.to(camera.position, {
+          z: startZ.current - 6,
+          x: (Math.random() - 0.5) * 3,
+          y: (Math.random() - 0.5) * 2,
+          duration: 2.2,
+          ease: "power4.inOut",
+          yoyo: true,
+          repeat: 1,
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      } else if (transition === 2) {
+        gsap.to(camera.rotation, {
+          x: (Math.random() - 0.5) * 0.3,
+          y: (Math.random() - 0.5) * 0.3,
+          z: (Math.random() - 0.5) * 0.2,
+          duration: 2.5,
+          ease: "sine.inOut",
+        });
+        gsap.to(camera.position, {
+          x: (Math.random() - 0.5) * 3,
+          y: (Math.random() - 0.5) * 2,
+          duration: 2.5,
+          ease: "power2.inOut",
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      }
+
+      setTimeout(loop, delay);
+    };
+
+    const timer = setTimeout(loop, 3000);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <>
@@ -188,27 +244,8 @@ function ReactiveCamera({ explosion }: { explosion: number }) {
   );
 }
 
-// === MAIN COMPONENT ===
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
-  const [height, setHeight] = useState<number | null>(null);
-
-  // ✅ Używamy visualViewport zamiast innerHeight
-  useEffect(() => {
-    const setStableHeight = () => {
-      const vh = window.visualViewport?.height || window.innerHeight;
-      setHeight(vh);
-    };
-
-    setStableHeight();
-    window.visualViewport?.addEventListener("resize", setStableHeight);
-    window.addEventListener("orientationchange", setStableHeight);
-
-    return () => {
-      window.visualViewport?.removeEventListener("resize", setStableHeight);
-      window.removeEventListener("orientationchange", setStableHeight);
-    };
-  }, []);
 
   const handleHoldStart = () => {
     const state = { value: explosion };
@@ -232,19 +269,21 @@ export default function NebulaScene() {
 
   return (
     <div
-      className="relative w-full bg-black overflow-hidden"
-      style={{
-        height: height ? `${height}px` : "100vh", // 👈 sztywna wysokość viewportu
-      }}
+      className="relative w-full h-[100svh] bg-black overflow-hidden"
     >
-      <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
-        <Canvas className="w-full h-full" camera={{ position: [0, 0, 15], fov: 70 }}>
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <Canvas camera={{ position: [0, 0, 15], fov: 70 }}>
           <ReactiveCamera explosion={explosion} />
         </Canvas>
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center space-y-6">
-        <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">FRAYMWEB</h1>
+        <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
+          FRAYMWEB
+        </h1>
+        <h1 className="text-4xl md:text-8xl font-[HyperBlob] cosmic-glass text-stroke">
+          fraymweb
+        </h1>
         <p className="text-gray-300">Crafting cosmic digital experiences</p>
 
         <button
@@ -255,7 +294,7 @@ export default function NebulaScene() {
           onTouchStart={handleHoldStart}
           onTouchEnd={handleHoldEnd}
         >
-          Przytrzymaj, by eksplodować 💥
+          Przytrzymaj, by eksplodowac 💥
         </button>
       </div>
     </div>
