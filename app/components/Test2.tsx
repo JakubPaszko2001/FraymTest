@@ -179,8 +179,15 @@ export default function NebulaScene() {
 
 // 🌌 ANIMACJA TEKSTU
 useEffect(() => {
-  const tl = gsap.timeline({ delay: 2.5, defaults: { ease: "power4.out" } });
+  // bezpieczeństwo: upewniamy się, że refs istnieją
+  if (!titleRef.current || !textRef.current) return;
 
+  const tl = gsap.timeline({
+    defaults: { ease: "power4.out" },
+    delay: 2.5, // start po animacji nebuli
+  });
+
+  // 🔹 animacja tytułu
   tl.fromTo(
     titleRef.current,
     {
@@ -194,13 +201,21 @@ useEffect(() => {
       yPercent: 0,
       filter: "blur(0px)",
       clipPath: "inset(0% 0% 0% 0%)",
-      duration: 1.3,
+      duration: 1.2,
     }
-  ).fromTo(
-    textRef.current,
+  );
+
+  // 🔹 animacja słów
+  const words = textRef.current.querySelectorAll(".word");
+
+  // jeśli nie ma słów, zakończ
+  if (!words || words.length === 0) return;
+
+  tl.fromTo(
+    words,
     {
       opacity: 0,
-      yPercent: 20, // 👈 tylko delikatny ruch z dołu, nie cały ekran
+      yPercent: 35,
       filter: "blur(10px)",
       clipPath: "inset(100% 0% 0% 0%)",
     },
@@ -210,10 +225,16 @@ useEffect(() => {
       filter: "blur(0px)",
       clipPath: "inset(0% 0% 0% 0%)",
       duration: 1.3,
+      stagger: 0.1,
     },
-    "-=0.7" // wchodzi zaraz po h1
+    "-=0.6" // odpala zaraz po tytule
   );
+
+  return () => {
+    tl.kill(); // czyszczenie po unmount
+  };
 }, []);
+
 
 
   const handleHoldStart = () => {
@@ -245,14 +266,20 @@ useEffect(() => {
         </Canvas>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white font-[HyperBlob] uppercase overflow-hidden">
-        <h1 ref={titleRef} className="text-2xl mb-4 opacity-0 tracking-[0.3em]">
-          FRAYMWEB
-        </h1>
-        <p ref={textRef} className="text-5xl leading-[1.2] opacity-0">
-          Crafting <br /> Cosmic <br /> Digital <br /> Visions
-        </p>
-      </div>
+<div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center font-[HyperBlob] uppercase overflow-hidden">
+  <h1 ref={titleRef} className="text-2xl mb-4 opacity-0 tracking-[0.3em]">
+    FRAYMWEB
+  </h1>
+  <p
+    ref={textRef}
+    className="text-gray-300 text-5xl leading-[1.2] flex flex-col gap-1"
+  >
+    <span className="word block opacity-0 will-change-transform">Crafting</span>
+    <span className="word block opacity-0 will-change-transform">Cosmic</span>
+    <span className="word block opacity-0 will-change-transform">Digital</span>
+    <span className="word block opacity-0 will-change-transform">Visions</span>
+  </p>
+</div>
     </section>
   );
 }
