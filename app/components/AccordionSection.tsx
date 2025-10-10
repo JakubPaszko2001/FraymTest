@@ -103,7 +103,7 @@ export default function AccordionSection() {
   ];
 
   return (
-    <section className="relative w-full max-w-md text-white border border-gray-700 divide-y divide-gray-700">
+    <section className="relative w-full backdrop-blur-[1px] max-w-md text-white border border-gray-700 divide-y divide-gray-700">
       {sections.map((section, index) => (
         <AccordionItem
           key={index}
