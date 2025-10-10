@@ -126,8 +126,8 @@ export default function AccordionSection() {
     if (imageRef.current) {
       gsap.set(imageRef.current, {
         position: "absolute",
-        top: "-203px",
-        left: "-100px",
+        top: "-210px",
+        left: "-110px",
         zIndex: 10,
       });
 
@@ -153,7 +153,7 @@ export default function AccordionSection() {
       gsap.set(textH2.current, {
         position: "absolute",
         top: "-110px",
-        left: "16px",
+        left: "32px",
         zIndex: 20,
       });
 
@@ -180,14 +180,14 @@ export default function AccordionSection() {
   }, []);
 
   return (
-    <section className="relative w-full flex items-center justify-center text-start flex-col font-[HyperBlob]">
+    <section className="relative w-full flex items-center justify-center text-start flex-col font-[HyperBlob] px-4 pt-10">
       
       {/* Brush Stroke z animacją */}
       <Image
         ref={imageRef}
         src={BrushStroke}
         alt="Brush Stroke"
-        width={300}
+        width={320}
         className="z-10"
       />
 
