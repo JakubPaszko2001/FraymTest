@@ -2,6 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "@studio-freight/lenis";
+import Image from "next/image";
+import BrushStroke from "../assets/brushstroke.png";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface SectionProps {
   title: string;
@@ -27,7 +33,7 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
         ease: "power2.out",
       });
       gsap.to(arrowRef.current, {
-        rotate: 225, // strzałka w górę
+        rotate: 225, // arrow up
         duration: 0.4,
         ease: "power2.out",
       });
@@ -39,7 +45,7 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
         ease: "power1.inOut",
       });
       gsap.to(arrowRef.current, {
-        rotate: 45, // strzałka w dół
+        rotate: 45, // arrow down
         duration: 0.4,
         ease: "power2.inOut",
       });
@@ -54,7 +60,6 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
       >
         {title}
 
-        {/* Strzałka (tworzona w CSS) */}
         <span
           ref={arrowRef}
           className="w-3 h-3 border-r-2 border-b-2 border-white transform rotate-45"
@@ -82,37 +87,129 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
 
 export default function AccordionSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const textH2 = useRef<HTMLHeadingElement>(null);
 
   const sections = [
     {
-      title: "Biznesowe",
-      items: ["Firmowa", "Usługowa", "Marketplace", "Platforma SAAS"],
+      title: "Business",
+      items: ["Corporate", "Service", "Marketplace", "SAAS Platform"],
     },
     {
-      title: "Personalne",
-      items: ["Portfolio", "Blog", "Wizytówka", "Strona CV"],
+      title: "Personal",
+      items: ["Portfolio", "Blog", "Business Card", "Resume Website"],
     },
     {
-      title: "Sklepy",
-      items: ["E-commerce", "Dropshipping", "Subskrypcyjny", "Z lokalnym odbiorem"],
+      title: "E-Commerce",
+      items: ["E-commerce", "Dropshipping", "Subscription-based", "Local Pickup"],
     },
     {
-      title: "Kreatywne",
-      items: ["Studio artystyczne", "Fotograficzna", "Agencja kreatywna", "Muzyczna"],
+      title: "Creative",
+      items: ["Art Studio", "Photography", "Creative Agency", "Music"],
     },
   ];
 
+  useEffect(() => {
+    // smooth scroll
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // animacja obrazu
+    if (imageRef.current) {
+      gsap.set(imageRef.current, {
+        position: "absolute",
+        top: "-203px",
+        left: "-100px",
+        zIndex: 10,
+      });
+
+      gsap.fromTo(
+        imageRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: imageRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }
+
+    // animacja nagłówka
+    if (textH2.current) {
+      gsap.set(textH2.current, {
+        position: "absolute",
+        top: "-110px",
+        left: "16px",
+        zIndex: 20,
+      });
+
+      gsap.fromTo(
+        textH2.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: textH2.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, []);
+
   return (
-    <section className="relative w-full backdrop-blur-[1px] max-w-md text-white border border-gray-700 divide-y divide-gray-700">
-      {sections.map((section, index) => (
-        <AccordionItem
-          key={index}
-          title={section.title}
-          items={section.items}
-          isOpen={openIndex === index}
-          onToggle={() => setOpenIndex(openIndex === index ? null : index)}
-        />
-      ))}
+    <section className="relative w-full flex items-center justify-center text-start flex-col font-[HyperBlob]">
+      
+      {/* Brush Stroke z animacją */}
+      <Image
+        ref={imageRef}
+        src={BrushStroke}
+        alt="Brush Stroke"
+        width={300}
+        className="z-10"
+      />
+
+      {/* Nagłówek z fade-in */}
+      <h2 ref={textH2} className="text-xl font-extrabold z-20 text-white">
+        We Create
+      </h2>
+
+      {/* Accordion z kategoriami */}
+      <div className="relative w-full backdrop-blur-[1px] max-w-md text-white border border-gray-700 divide-y divide-gray-700">
+        {sections.map((section, index) => (
+          <AccordionItem
+            key={index}
+            title={section.title}
+            items={section.items}
+            isOpen={openIndex === index}
+            onToggle={() =>
+              setOpenIndex(openIndex === index ? null : index)
+            }
+          />
+        ))}
+      </div>
     </section>
   );
 }

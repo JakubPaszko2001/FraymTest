@@ -124,7 +124,7 @@ export default function AboutSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center px-8 text-start flex flex-col">
+    <section className="relative min-h-screen w-full flex items-center justify-center px-8 text-start flex flex-col font-[HyperBlob]">
       {/* 🔹 Brush Stroke z animacją opacity */}
       <Image
         ref={imageRef}
@@ -136,7 +136,7 @@ export default function AboutSection() {
 
       {/* 🔹 Nagłówek */}
       <h2 ref={textH2} className="text-xl font-extrabold z-20 text-white">
-        O NAS
+        About
       </h2>
 
       {/* 🔹 Tekst z animacją char */}
@@ -144,10 +144,8 @@ export default function AboutSection() {
         ref={textRef}
         className="fade-text text-2xl font-extrabold leading-snug text-white max-w-4xl uppercase z-20"
       >
-        Jesteśmy{" "}
-        <span>innowacyjną</span> firmą wykorzystującą najnowsze technologie oraz
-        tworzącą <span>unikalne</span> designy, które zachwycają i zapadają w
-        pamięć naszym klientom.
+        WE ARE{" "}
+        <span className="backdrop-blur-[1px] rounded-md px-1">INNOVATIVE</span> company that uses the latest technologies and creates <span className="backdrop-blur-[1px] rounded-md px-1">UNIQUE</span> designs that amaze and leave a lasting impression on our clients.
       </p>
     </section>
   );
