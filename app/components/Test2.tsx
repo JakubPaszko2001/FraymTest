@@ -252,6 +252,7 @@ export default function NebulaScene() {
   const [paused, setPaused] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
+  const blurCirclesRef = useRef<HTMLDivElement>(null);
   const explosionObj = useRef({ value: 0 });
   const explosionTween = useRef<gsap.core.Tween | null>(null);
 
@@ -350,6 +351,8 @@ export default function NebulaScene() {
 
   return (
     <section className="relative w-full h-[100svh] bg-black overflow-hidden">
+      <div ref={blurCirclesRef} className="absolute hidden top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !p-12 rounded-[100%] backdrop-blur-[1px] w-[400px] h-[400px] pointer-events-none z-10">
+      </div>
       {/* 🔘 przycisk eksplozji */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-[calc(3svh)] z-50">
         <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} />
@@ -364,15 +367,15 @@ export default function NebulaScene() {
 
       {/* ✨ napisy */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center font-[HyperBlob] uppercase overflow-hidden">
-        <h1 ref={titleRef} className="text-2xl mb-4 opacity-0 tracking-[0.3em]">
-          FRAYMWEB
-        </h1>
-        <p ref={textRef} className="text-gray-300 text-5xl leading-[1.2] flex flex-col gap-1">
-          <span className="word block opacity-0">Crafting</span>
-          <span className="word block opacity-0">Cosmic</span>
-          <span className="word block opacity-0">Digital</span>
-          <span className="word block opacity-0">Visions</span>
-        </p>
+          <h1 ref={titleRef} className="text-2xl mb-4 opacity-0 tracking-[0.3em]">
+            FRAYMWEB
+          </h1>
+          <p ref={textRef} className="text-gray-300 text-5xl leading-[1.2] flex flex-col gap-1">
+            <span className="word block opacity-0">Crafting</span>
+            <span className="word block opacity-0">Cosmic</span>
+            <span className="word block opacity-0">Digital</span>
+            <span className="word block opacity-0">Visions</span>
+          </p>
       </div>
     </section>
   );
