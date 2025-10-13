@@ -316,11 +316,28 @@ export default function NebulaScene() {
     if (textRef.current) {
       const words = textRef.current.querySelectorAll(".word");
       colorTween.current = gsap.to(words, {
-        color: "#66ccff", // kolor, np. błękitno-neonowy
+        color: "#6699FF",
         duration: 0.6,
         ease: "power2.out",
         stagger: 0.05,
       });
+    }
+
+    // 🌫️ pokazanie blurCirclesRef
+    if (blurCirclesRef.current) {
+      gsap.killTweensOf(blurCirclesRef.current);
+      gsap.set(blurCirclesRef.current, { display: "block" });
+      gsap.fromTo(
+        blurCirclesRef.current,
+        { opacity: 0, scale: 0.7, filter: "blur(20px)" },
+        {
+          opacity: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          duration: 0.8,
+          ease: "power3.out",
+        }
+      );
     }
   };
 
@@ -336,15 +353,32 @@ export default function NebulaScene() {
       onUpdate: () => setExplosion(explosionObj.current.value),
     });
 
-    // 🎨 powrót koloru do pierwotnego
+    // 🎨 powrót koloru
     if (colorTween.current) colorTween.current.kill();
     if (textRef.current) {
       const words = textRef.current.querySelectorAll(".word");
       gsap.to(words, {
-        color: "#d1d5db", // czyli text-gray-300
+        color: "#d1d5db",
         duration: 0.8,
         ease: "power2.inOut",
         stagger: 0.05,
+      });
+    }
+
+    // 🌫️ zniknięcie blurCirclesRef
+    if (blurCirclesRef.current) {
+      gsap.killTweensOf(blurCirclesRef.current);
+      gsap.to(blurCirclesRef.current, {
+        opacity: 0,
+        scale: 0.7,
+        filter: "blur(20px)",
+        duration: 0.6,
+        ease: "power2.inOut",
+        onComplete: () => {
+          if (blurCirclesRef.current) {
+            gsap.set(blurCirclesRef.current, { display: "none" });
+          }
+        },
       });
     }
   };
