@@ -408,7 +408,7 @@ export default function NebulaScene() {
             <span className="word block opacity-0">Crafting</span>
             <span className="word block opacity-0">Cosmic</span>
             <span className="word block opacity-0">Digital</span>
-            <span className="word block opacity-0">Visions</span>
+            <span className="word block opacity-0">Vision</span>
           </p>
       </div>
     </section>
