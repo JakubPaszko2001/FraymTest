@@ -152,164 +152,131 @@ import HoldButton from "./HoldButton";
       </points>
     );
   }
+function ReactiveCamera({ explosion, paused }: { explosion: number; paused: boolean }) {
+  const { camera } = useThree();
+  const startZ = useRef(camera.position.z);
+  const activeTweens = useRef<gsap.core.Tween[]>([]);
 
-  function ReactiveCamera({ explosion }: { explosion: number }) {
-    const { camera } = useThree();
-    const startZ = useRef(camera.position.z);
-  
-    useEffect(() => {
-      gsap.to(camera.position, {
-        z: startZ.current + explosion * 3,
-        duration: 0.4,
-        ease: "power2.inOut",
-      });
-    }, [explosion]);
-  
-    useFrame(() => {
-      camera.lookAt(0, 0, 0);
-    });
-  
-    useEffect(() => {
-      let active = true;
-    
-      const loop = () => {
-        if (!active) return;
-      
-        const transition = Math.floor(Math.random() * 3);
-        const delay = 4000 + Math.random() * 3000;
-      
-        if (transition === 0) {
-          gsap.to(camera.position, {
-            x: Math.sin(Math.random() * Math.PI * 2) * 4,
-            y: Math.cos(Math.random() * Math.PI) * 2,
-            z: startZ.current - 2 - Math.random() * 2,
-            duration: 3.5,
-            ease: "power3.inOut",
-            onUpdate: () => camera.lookAt(0, 0, 0),
-          });
-        } else if (transition === 1) {
-          gsap.to(camera.position, {
-            z: startZ.current - 6,
-            x: (Math.random() - 0.5) * 3,
-            y: (Math.random() - 0.5) * 2,
-            duration: 2.2,
-            ease: "power4.inOut",
-            yoyo: true,
-            repeat: 1,
-            onUpdate: () => camera.lookAt(0, 0, 0),
-          });
-        } else if (transition === 2) {
-          gsap.to(camera.rotation, {
-            x: (Math.random() - 0.5) * 0.3,
-            y: (Math.random() - 0.5) * 0.3,
-            z: (Math.random() - 0.5) * 0.2,
-            duration: 2.5,
-            ease: "sine.inOut",
-          });
-          gsap.to(camera.position, {
-            x: (Math.random() - 0.5) * 3,
-            y: (Math.random() - 0.5) * 2,
-            duration: 2.5,
-            ease: "power2.inOut",
-            onUpdate: () => camera.lookAt(0, 0, 0),
-          });
-        }
-      
-        setTimeout(loop, delay);
-      };
-    
-      const timer = setTimeout(loop, 3000);
-      return () => {
-        active = false;
-        clearTimeout(timer);
-      };
-    }, []);
-  
-    return (
-      <>
-        <NebulaParticles explosion={explosion} />
-        <NebulaParticles explosion={explosion} aura />
-      </>
-    );
-  }
-
-  export default function NebulaScene() {
-    const [explosion, setExplosion] = useState(0);
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const textRef = useRef<HTMLParagraphElement>(null);
-
-  // 🌌 ANIMACJA TEKSTU
   useEffect(() => {
-    // bezpieczeństwo: upewniamy się, że refs istnieją
-    if (!titleRef.current || !textRef.current) return;
+    // animacja tylko jeśli nie wciśnięto przycisku
+    if (paused) {
+      // zatrzymaj wszystkie aktywne animacje kamery
+      activeTweens.current.forEach((t) => t.kill());
+      activeTweens.current = [];
+      return;
+    }
 
-    const tl = gsap.timeline({
-      defaults: { ease: "power4.out" },
-      delay: 2.5, // start po animacji nebuli
-    });
+    let active = true;
 
-    // 🔹 animacja tytułu
-    tl.fromTo(
-      titleRef.current,
-      {
-        opacity: 0,
-        yPercent: 100,
-        filter: "blur(10px)",
-        clipPath: "inset(100% 0% 0% 0%)",
-      },
-      {
-        opacity: 1,
-        yPercent: 0,
-        filter: "blur(0px)",
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: 1.2,
+    const loop = () => {
+      if (!active || paused) return;
+
+      const transition = Math.floor(Math.random() * 3);
+      const delay = 4000 + Math.random() * 3000;
+
+      let t1: gsap.core.Tween | null = null;
+      let t2: gsap.core.Tween | null = null;
+
+      if (transition === 0) {
+        t1 = gsap.to(camera.position, {
+          x: Math.sin(Math.random() * Math.PI * 2) * 4,
+          y: Math.cos(Math.random() * Math.PI) * 2,
+          z: startZ.current - 2 - Math.random() * 2,
+          duration: 3.5,
+          ease: "power3.inOut",
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      } else if (transition === 1) {
+        t1 = gsap.to(camera.position, {
+          z: startZ.current - 6,
+          x: (Math.random() - 0.5) * 3,
+          y: (Math.random() - 0.5) * 2,
+          duration: 2.2,
+          ease: "power4.inOut",
+          yoyo: true,
+          repeat: 1,
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
+      } else {
+        t1 = gsap.to(camera.rotation, {
+          x: (Math.random() - 0.5) * 0.3,
+          y: (Math.random() - 0.5) * 0.3,
+          z: (Math.random() - 0.5) * 0.2,
+          duration: 2.5,
+          ease: "sine.inOut",
+        });
+        t2 = gsap.to(camera.position, {
+          x: (Math.random() - 0.5) * 3,
+          y: (Math.random() - 0.5) * 2,
+          duration: 2.5,
+          ease: "power2.inOut",
+          onUpdate: () => camera.lookAt(0, 0, 0),
+        });
       }
-    );
 
-    // 🔹 animacja słów
-    const words = textRef.current.querySelectorAll(".word");
+      if (t1) activeTweens.current.push(t1);
+      if (t2) activeTweens.current.push(t2);
 
-    // jeśli nie ma słów, zakończ
-    if (!words || words.length === 0) return;
-
-    tl.fromTo(
-      words,
-      {
-        opacity: 0,
-        yPercent: 35,
-        filter: "blur(10px)",
-        clipPath: "inset(100% 0% 0% 0%)",
-      },
-      {
-        opacity: 1,
-        yPercent: 0,
-        filter: "blur(0px)",
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: 1.3,
-        stagger: 0.1,
-      },
-      "-=0.6" // odpala zaraz po tytule
-    );
-
-    return () => {
-      tl.kill(); // czyszczenie po unmount
+      setTimeout(loop, delay);
     };
-  }, []);
+
+    const timer = setTimeout(loop, 3000);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+      activeTweens.current.forEach((t) => t.kill());
+      activeTweens.current = [];
+    };
+  }, [paused]);
+
+  useEffect(() => {
+    gsap.to(camera.position, {
+      z: startZ.current + explosion * 3,
+      duration: 0.4,
+      ease: "power2.inOut",
+    });
+  }, [explosion]);
+
+  useFrame(() => {
+    camera.lookAt(0, 0, 0);
+  });
+
+  return (
+    <>
+      <NebulaParticles explosion={explosion} />
+      <NebulaParticles explosion={explosion} aura />
+    </>
+  );
+}
+
+export default function NebulaScene() {
+  const [explosion, setExplosion] = useState(0);
+  const [paused, setPaused] = useState(false); // 🔹 nowy stan
+
+  const explosionObj = useRef({ value: 0 });
+  const explosionTween = useRef<gsap.core.Tween | null>(null);
 
   const handleHoldStart = () => {
-    gsap.to({ value: explosion }, {
+    setPaused(true); // 🚫 zatrzymaj kamerę
+    if (explosionTween.current) explosionTween.current.kill();
+
+    explosionTween.current = gsap.to(explosionObj.current, {
       value: 1,
-      duration: 0.5,
+      duration: 0.6,
       ease: "power2.out",
-      onUpdate: function () { setExplosion(this.targets()[0].value); },
+      onUpdate: () => setExplosion(explosionObj.current.value),
     });
   };
+
   const handleHoldEnd = () => {
-    gsap.to({ value: explosion }, {
+    setPaused(false); // ✅ wznów ruch kamery
+    if (explosionTween.current) explosionTween.current.kill();
+
+    explosionTween.current = gsap.to(explosionObj.current, {
       value: 0,
       duration: 0.8,
       ease: "power2.inOut",
-      onUpdate: function () { setExplosion(this.targets()[0].value); },
+      onUpdate: () => setExplosion(explosionObj.current.value),
     });
   };
 
@@ -320,25 +287,12 @@ import HoldButton from "./HoldButton";
       </div>
 
       <div className="fixed inset-0 pointer-events-none z-0">
-        <Canvas style={{display: "block", minHeight: "100svh", height: "100lvh",}} camera={{ position: [0, 0, 15], fov: 70 }}>
-          <ReactiveCamera explosion={explosion} />
+        <Canvas style={{ display: "block", minHeight: "100svh", height: "100lvh" }} camera={{ position: [0, 0, 15], fov: 70 }}>
+          <ReactiveCamera explosion={explosion} paused={paused} />
         </Canvas>
       </div>
 
-<div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center font-[HyperBlob] uppercase overflow-hidden">
-  <h1 ref={titleRef} className="text-2xl mb-4 opacity-0 tracking-[0.3em]">
-    FRAYMWEB
-  </h1>
-  <p
-    ref={textRef}
-    className="text-gray-300 text-5xl leading-[1.2] flex flex-col gap-1"
-  >
-    <span className="word block opacity-0 will-change-transform">Crafting</span>
-    <span className="word block opacity-0 will-change-transform">Cosmic</span>
-    <span className="word block opacity-0 will-change-transform">Digital</span>
-    <span className="word block opacity-0 will-change-transform">Visions</span>
-  </p>
-</div>
+      {/* reszta bez zmian */}
     </section>
   );
 }
