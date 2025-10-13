@@ -313,15 +313,15 @@ export default function NebulaScene() {
     });
 
     // 🔥 animacja koloru napisów
-    if (textRef.current) {
-      const words = textRef.current.querySelectorAll(".word");
-      colorTween.current = gsap.to(words, {
-        color: "#6699FF",
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: 0.05,
-      });
-    }
+    // if (textRef.current) {
+    //   const words = textRef.current.querySelectorAll(".word");
+    //   colorTween.current = gsap.to(words, {
+    //     color: "white",
+    //     duration: 0.6,
+    //     ease: "power2.out",
+    //     stagger: 0.05,
+    //   });
+    // }
 
     // 🌫️ pokazanie blurCirclesRef
     if (blurCirclesRef.current) {
@@ -355,15 +355,15 @@ export default function NebulaScene() {
 
     // 🎨 powrót koloru
     if (colorTween.current) colorTween.current.kill();
-    if (textRef.current) {
-      const words = textRef.current.querySelectorAll(".word");
-      gsap.to(words, {
-        color: "#d1d5db",
-        duration: 0.8,
-        ease: "power2.inOut",
-        stagger: 0.05,
-      });
-    }
+    // if (textRef.current) {
+    //   const words = textRef.current.querySelectorAll(".word");
+    //   gsap.to(words, {
+    //     color: "#d1d5db",
+    //     duration: 0.8,
+    //     ease: "power2.inOut",
+    //     stagger: 0.05,
+    //   });
+    // }
 
     // 🌫️ zniknięcie blurCirclesRef
     if (blurCirclesRef.current) {
@@ -385,7 +385,7 @@ export default function NebulaScene() {
 
   return (
     <section className="relative w-full h-[100svh] bg-black overflow-hidden">
-      <div ref={blurCirclesRef} className="absolute hidden top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !p-12 rounded-[100%] backdrop-blur-[1px] w-[400px] h-[400px] pointer-events-none z-10">
+      <div ref={blurCirclesRef} className="absolute hidden border-2 border-[#6699FF] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !p-12 rounded-[100%] backdrop-blur-[1px] w-[400px] h-[400px] pointer-events-none z-10">
       </div>
       {/* 🔘 przycisk eksplozji */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-[calc(3svh)] z-50">
