@@ -138,6 +138,7 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
           array={particles}
           count={particles.length / 3}
           itemSize={3}
+          args={[particles, 3]}
         />
       </bufferGeometry>
       <shaderMaterial
@@ -153,98 +154,98 @@ function NebulaParticles({ explosion, aura = false }: { explosion: number; aura?
   );
 }
 
-function ReactiveCamera({ explosion, paused }: { explosion: number; paused: boolean }) {
-  const { camera } = useThree();
-  const startZ = useRef(camera.position.z);
-  const activeTweens = useRef<gsap.core.Tween[]>([]);
-
-  useEffect(() => {
-    if (paused) {
-      activeTweens.current.forEach((t) => t.kill());
-      activeTweens.current = [];
-      return;
-    }
-
-    let active = true;
-    const loop = () => {
-      if (!active || paused) return;
-      const transition = Math.floor(Math.random() * 3);
-      const delay = 4000 + Math.random() * 3000;
-
-      let t1: gsap.core.Tween | null = null;
-      let t2: gsap.core.Tween | null = null;
-
-      if (transition === 0) {
-        t1 = gsap.to(camera.position, {
-          x: Math.sin(Math.random() * Math.PI * 2) * 4,
-          y: Math.cos(Math.random() * Math.PI) * 2,
-          z: startZ.current - 2 - Math.random() * 2,
-          duration: 3.5,
-          ease: "power3.inOut",
-          onUpdate: () => camera.lookAt(0, 0, 0),
-        });
-      } else if (transition === 1) {
-        t1 = gsap.to(camera.position, {
-          z: startZ.current - 6,
-          x: (Math.random() - 0.5) * 3,
-          y: (Math.random() - 0.5) * 2,
-          duration: 2.2,
-          ease: "power4.inOut",
-          yoyo: true,
-          repeat: 1,
-          onUpdate: () => camera.lookAt(0, 0, 0),
-        });
-      } else {
-        t1 = gsap.to(camera.rotation, {
-          x: (Math.random() - 0.5) * 0.3,
-          y: (Math.random() - 0.5) * 0.3,
-          z: (Math.random() - 0.5) * 0.2,
-          duration: 2.5,
-          ease: "sine.inOut",
-        });
-        t2 = gsap.to(camera.position, {
-          x: (Math.random() - 0.5) * 3,
-          y: (Math.random() - 0.5) * 2,
-          duration: 2.5,
-          ease: "power2.inOut",
-          onUpdate: () => camera.lookAt(0, 0, 0),
-        });
+  function ReactiveCamera({ explosion, paused }: { explosion: number; paused: boolean }) {
+    const { camera } = useThree();
+    const startZ = useRef(camera.position.z);
+    const activeTweens = useRef<gsap.core.Tween[]>([]);
+  
+    useEffect(() => {
+      if (paused) {
+        activeTweens.current.forEach((t) => t.kill());
+        activeTweens.current = [];
+        return;
       }
-
-      if (t1) activeTweens.current.push(t1);
-      if (t2) activeTweens.current.push(t2);
-
-      setTimeout(loop, delay);
-    };
-
-    const timer = setTimeout(loop, 3000);
-    return () => {
-      active = false;
-      clearTimeout(timer);
-      activeTweens.current.forEach((t) => t.kill());
-      activeTweens.current = [];
-    };
-  }, [paused]);
-
-  useEffect(() => {
-    gsap.to(camera.position, {
-      z: startZ.current + explosion * 3,
-      duration: 0.4,
-      ease: "power2.inOut",
+    
+      let active = true;
+      const loop = () => {
+        if (!active || paused) return;
+        const transition = Math.floor(Math.random() * 3);
+        const delay = 4000 + Math.random() * 3000;
+      
+        let t1: gsap.core.Tween | null = null;
+        let t2: gsap.core.Tween | null = null;
+      
+        if (transition === 0) {
+          t1 = gsap.to(camera.position, {
+            x: Math.sin(Math.random() * Math.PI * 2) * 4,
+            y: Math.cos(Math.random() * Math.PI) * 2,
+            z: startZ.current - 2 - Math.random() * 2,
+            duration: 3.5,
+            ease: "power3.inOut",
+            onUpdate: () => camera.lookAt(0, 0, 0),
+          });
+        } else if (transition === 1) {
+          t1 = gsap.to(camera.position, {
+            z: startZ.current - 6,
+            x: (Math.random() - 0.5) * 3,
+            y: (Math.random() - 0.5) * 2,
+            duration: 2.2,
+            ease: "power4.inOut",
+            yoyo: true,
+            repeat: 1,
+            onUpdate: () => camera.lookAt(0, 0, 0),
+          });
+        } else {
+          t1 = gsap.to(camera.rotation, {
+            x: (Math.random() - 0.5) * 0.3,
+            y: (Math.random() - 0.5) * 0.3,
+            z: (Math.random() - 0.5) * 0.2,
+            duration: 2.5,
+            ease: "sine.inOut",
+          });
+          t2 = gsap.to(camera.position, {
+            x: (Math.random() - 0.5) * 3,
+            y: (Math.random() - 0.5) * 2,
+            duration: 2.5,
+            ease: "power2.inOut",
+            onUpdate: () => camera.lookAt(0, 0, 0),
+          });
+        }
+      
+        if (t1) activeTweens.current.push(t1);
+        if (t2) activeTweens.current.push(t2);
+      
+        setTimeout(loop, delay);
+      };
+    
+      const timer = setTimeout(loop, 3000);
+      return () => {
+        active = false;
+        clearTimeout(timer);
+        activeTweens.current.forEach((t) => t.kill());
+        activeTweens.current = [];
+      };
+    }, [paused]);
+  
+    useEffect(() => {
+      gsap.to(camera.position, {
+        z: startZ.current + explosion * 3,
+        duration: 0.4,
+        ease: "power2.inOut",
+      });
+    }, [explosion]);
+  
+    useFrame(() => {
+      camera.lookAt(0, 0, 0);
     });
-  }, [explosion]);
-
-  useFrame(() => {
-    camera.lookAt(0, 0, 0);
-  });
-
-  return (
-    <>
-      <NebulaParticles explosion={explosion} />
-      <NebulaParticles explosion={explosion} aura />
-    </>
-  );
-}
+  
+    return (
+      <>
+        <NebulaParticles explosion={explosion} />
+        <NebulaParticles explosion={explosion} aura />
+      </>
+    );
+  }
 
 export default function NebulaScene() {
   const [explosion, setExplosion] = useState(0);
@@ -254,7 +255,7 @@ export default function NebulaScene() {
   const explosionObj = useRef({ value: 0 });
   const explosionTween = useRef<gsap.core.Tween | null>(null);
 
-  // 🌌 ANIMACJA TEKSTU
+  // 🌌 ANIMACJA TEKSTU (pojawienie)
   useEffect(() => {
     if (!titleRef.current || !textRef.current) return;
     const tl = gsap.timeline({
@@ -290,29 +291,61 @@ export default function NebulaScene() {
       "-=0.6"
     );
 
-    return () => tl.kill();
+    return () => {
+      tl.kill();
+    };
   }, []);
+
+  // 💥 animacja kolorów napisów przy trzymaniu przycisku
+  const colorTween = useRef<gsap.core.Tween | null>(null);
 
   const handleHoldStart = () => {
     setPaused(true);
     if (explosionTween.current) explosionTween.current.kill();
+
+    // eksplozja
     explosionTween.current = gsap.to(explosionObj.current, {
       value: 1,
       duration: 0.6,
       ease: "power2.out",
       onUpdate: () => setExplosion(explosionObj.current.value),
     });
+
+    // 🔥 animacja koloru napisów
+    if (textRef.current) {
+      const words = textRef.current.querySelectorAll(".word");
+      colorTween.current = gsap.to(words, {
+        color: "#66ccff", // kolor, np. błękitno-neonowy
+        duration: 0.6,
+        ease: "power2.out",
+        stagger: 0.05,
+      });
+    }
   };
 
   const handleHoldEnd = () => {
     setPaused(false);
     if (explosionTween.current) explosionTween.current.kill();
+
+    // eksplozja wraca
     explosionTween.current = gsap.to(explosionObj.current, {
       value: 0,
       duration: 0.8,
       ease: "power2.inOut",
       onUpdate: () => setExplosion(explosionObj.current.value),
     });
+
+    // 🎨 powrót koloru do pierwotnego
+    if (colorTween.current) colorTween.current.kill();
+    if (textRef.current) {
+      const words = textRef.current.querySelectorAll(".word");
+      gsap.to(words, {
+        color: "#d1d5db", // czyli text-gray-300
+        duration: 0.8,
+        ease: "power2.inOut",
+        stagger: 0.05,
+      });
+    }
   };
 
   return (
