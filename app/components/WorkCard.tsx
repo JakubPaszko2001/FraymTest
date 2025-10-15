@@ -1,6 +1,10 @@
 "use client";
+
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface WorkCardProps {
   step: ReactNode;
@@ -10,12 +14,19 @@ interface WorkCardProps {
   note?: ReactNode;
 }
 
-export default function WorkCard({ step, title, subtitle, text, note }: WorkCardProps) {
+export default function WorkCard({
+  step,
+  title,
+  subtitle,
+  text,
+  note,
+}: WorkCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!cardRef.current) return;
-    gsap.fromTo(
+
+    const anim = gsap.fromTo(
       cardRef.current,
       { opacity: 0, y: 60 },
       {
@@ -26,11 +37,17 @@ export default function WorkCard({ step, title, subtitle, text, note }: WorkCard
         scrollTrigger: {
           trigger: cardRef.current,
           start: "top 90%",
-          toggleActions: "play none none reverse",
-          once: true, // animacja tylko raz
+          toggleActions: "play none none none",
+          onLeave: (self) => self.disable(), // wyłącza trigger po zakończeniu animacji
         },
       }
     );
+
+    // Sprzątanie — usuwa trigger przy odmontowaniu komponentu
+    return () => {
+      if (anim.scrollTrigger) anim.scrollTrigger.kill();
+      anim.kill();
+    };
   }, []);
 
   return (
@@ -42,9 +59,13 @@ export default function WorkCard({ step, title, subtitle, text, note }: WorkCard
 
       <div className="mt-4 border border-gray-700 rounded-lg p-5 bg-black/50 backdrop-blur-[1px]">
         <h4 className="text-white/90 font-semibold text-lg">{title}</h4>
-        <p className="text-lg font-semibold mt-2 text-white/80">{subtitle}</p>
-        <p className="text-gray-300 mt-2 leading-relaxed">{text}</p>
-        <p className="italic text-gray-500 mt-2">{note}</p>
+        {subtitle && (
+          <p className="text-lg font-semibold mt-2 text-white/80">
+            {subtitle}
+          </p>
+        )}
+        {text && <p className="text-gray-300 mt-2 leading-relaxed">{text}</p>}
+        {note && <p className="italic text-gray-500 mt-2">{note}</p>}
       </div>
     </div>
   );
