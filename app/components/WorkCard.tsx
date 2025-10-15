@@ -1,4 +1,6 @@
-import { ReactNode } from "react";
+"use client";
+import { ReactNode, useEffect, useRef } from "react";
+import gsap from "gsap";
 
 interface WorkCardProps {
   step: ReactNode;
@@ -9,8 +11,33 @@ interface WorkCardProps {
 }
 
 export default function WorkCard({ step, title, subtitle, text, note }: WorkCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!cardRef.current) return;
+    gsap.fromTo(
+      cardRef.current,
+      { opacity: 0, y: 60 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: cardRef.current,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+          once: true, // animacja tylko raz
+        },
+      }
+    );
+  }, []);
+
   return (
-    <div className="relative border border-gray-700 backdrop-blur-[1px] p-6 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] transition-all duration-300  font-[HyperBlob]">
+    <div
+      ref={cardRef}
+      className="relative border border-gray-700 backdrop-blur-[1px] p-6 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] transition-all duration-300 font-[HyperBlob]"
+    >
       <h3 className="text-white font-semibold text-lg tracking-wide">{step}</h3>
 
       <div className="mt-4 border border-gray-700 rounded-lg p-5 bg-black/50 backdrop-blur-[1px]">

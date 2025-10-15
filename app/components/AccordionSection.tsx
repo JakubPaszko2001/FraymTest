@@ -22,7 +22,6 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
 
   useEffect(() => {
     if (!contentRef.current) return;
-
     const el = contentRef.current;
 
     if (isOpen) {
@@ -53,13 +52,12 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
   }, [isOpen]);
 
   return (
-    <div className="border-b border-gray-700 overflow-hidden !z-100">
+    <div className="border-b border-gray-700 overflow-hidden accordion-section-item">
       <button
         onClick={onToggle}
         className="w-full flex justify-between items-center py-4 px-4 text-white font-extrabold text-lg uppercase tracking-wide"
       >
         {title}
-
         <span
           ref={arrowRef}
           className="w-3 h-3 border-r-2 border-b-2 border-white transform rotate-45"
@@ -101,7 +99,12 @@ export default function AccordionSection() {
     },
     {
       title: "E-Commerce",
-      items: ["E-commerce", "Dropshipping", "Subscription-based", "Local Pickup"],
+      items: [
+        "E-commerce",
+        "Dropshipping",
+        "Subscription-based",
+        "Local Pickup",
+      ],
     },
     {
       title: "Creative",
@@ -110,7 +113,7 @@ export default function AccordionSection() {
   ];
 
   useEffect(() => {
-    // smooth scroll
+    // smooth scroll (Lenis)
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -174,6 +177,40 @@ export default function AccordionSection() {
       );
     }
 
+    // animacja kontenera accordionu (fade-in)
+    gsap.fromTo(
+      ".accordion-container",
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".accordion-container",
+          start: "top 90%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    // animacja elementów accordionu (fade-in + slide-up)
+    gsap.fromTo(
+      ".accordion-section-item",
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: ".accordion-container",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
@@ -181,7 +218,6 @@ export default function AccordionSection() {
 
   return (
     <section className="relative w-full flex items-center justify-center text-start flex-col font-[HyperBlob] px-4 pt-10">
-      
       {/* Brush Stroke z animacją */}
       <Image
         ref={imageRef}
@@ -197,7 +233,7 @@ export default function AccordionSection() {
       </h2>
 
       {/* Accordion z kategoriami */}
-      <div className="relative w-full backdrop-blur-[1px] max-w-md text-white border border-gray-700 divide-y divide-gray-700">
+      <div className="accordion-container relative w-full backdrop-blur-[1px] max-w-md text-white border border-gray-700 divide-y divide-gray-700">
         {sections.map((section, index) => (
           <AccordionItem
             key={index}
