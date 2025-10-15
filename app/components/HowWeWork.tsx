@@ -399,7 +399,6 @@ export default function HowWeWork() {
             key={i}
             step={s.step}
             title={s.title}
-            subtitle={s.subtitle}
             text={s.text}
             note={s.note}
           />

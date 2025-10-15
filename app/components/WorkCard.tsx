@@ -1,9 +1,11 @@
+import { ReactNode } from "react";
+
 interface WorkCardProps {
-  step: string;
-  title: string;
-  subtitle: string;
-  text: string;
-  note: string;
+  step: ReactNode;
+  title: ReactNode;
+  subtitle?: ReactNode;
+  text?: ReactNode;
+  note?: ReactNode;
 }
 
 export default function WorkCard({ step, title, subtitle, text, note }: WorkCardProps) {
