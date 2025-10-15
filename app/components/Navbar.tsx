@@ -62,7 +62,7 @@ export default function Navbar() {
           fixed top-0 left-0 w-full h-screen
           bg-black flex flex-col items-center justify-center
           space-y-8 text-white text-2xl
-          z-50
+          z-50 font-[HyperBlob]
         "
         style={{ transform: 'translateY(-100%)' }}
       >

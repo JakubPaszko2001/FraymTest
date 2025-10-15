@@ -385,7 +385,7 @@ export default function NebulaScene() {
 
   return (
     <section className="relative w-full h-[100svh] bg-black overflow-hidden">
-      <div ref={blurCirclesRef} className="absolute hidden border-2 border-[#6699FF] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !p-12 rounded-[100%] backdrop-blur-[1px] w-[400px] h-[400px] pointer-events-none z-10">
+      <div ref={blurCirclesRef} className="absolute hidden border-2 border-[#6699FF] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !p-12 rounded-[100%] backdrop-blur-[2px] w-[400px] h-[400px] pointer-events-none z-10">
       </div>
       {/* 🔘 przycisk eksplozji */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-[calc(3svh)] z-50">
