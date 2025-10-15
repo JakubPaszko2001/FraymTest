@@ -389,7 +389,7 @@ export default function HowWeWork() {
 //     note: "Nasza współpraca nie kończy się na starcie — to dopiero początek.",
 //   },
 // ];
-
+//////////
 
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-white py-20">
