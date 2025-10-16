@@ -38,12 +38,11 @@ export default function WorkCard({
           trigger: cardRef.current,
           start: "top 90%",
           toggleActions: "play none none none",
-          onLeave: (self) => self.disable(), // wyłącza trigger po zakończeniu animacji
+          onLeave: (self) => self.disable(),
         },
       }
     );
 
-    // Sprzątanie — usuwa trigger przy odmontowaniu komponentu
     return () => {
       if (anim.scrollTrigger) anim.scrollTrigger.kill();
       anim.kill();
@@ -53,19 +52,45 @@ export default function WorkCard({
   return (
     <div
       ref={cardRef}
-      className="relative border border-gray-700 backdrop-blur-[1px] p-6 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] transition-all duration-300 font-[HyperBlob]"
+      className="
+        relative 
+        border border-gray-700 
+        backdrop-blur-[1px] 
+        p-8                     /* większe wewnętrzne odstępy */
+        shadow-[0_0_20px_rgba(255,255,255,0.05)] 
+        hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] 
+        transition-all 
+        duration-300 
+        font-[HyperBlob]
+        min-h-[360px]           /* minimalna wysokość — klucz do równości boxów */
+        flex 
+        flex-col 
+        justify-between         /* równoważenie zawartości */
+      "
     >
-      <h3 className="text-white font-semibold text-lg tracking-wide">{step}</h3>
+      <h3 className="text-white font-semibold text-lg md:text-xl tracking-wide mb-3">
+        {step}
+      </h3>
 
-      <div className="mt-4 border border-gray-700 rounded-lg p-5 bg-black/50 backdrop-blur-[1px]">
-        <h4 className="text-white/90 font-semibold text-lg">{title}</h4>
-        {subtitle && (
-          <p className="text-lg font-semibold mt-2 text-white/80">
-            {subtitle}
+      <div className="border border-gray-700 rounded-lg p-5 bg-black/50 backdrop-blur-[1px] flex-1 flex flex-col justify-between">
+        <div>
+          <h4 className="text-white/90 font-semibold text-lg md:text-xl">
+            {title}
+          </h4>
+          {subtitle && (
+            <p className="text-lg font-semibold mt-2 text-white/80">
+              {subtitle}
+            </p>
+          )}
+          {text && (
+            <p className="text-gray-300 mt-2 leading-relaxed">{text}</p>
+          )}
+        </div>
+        {note && (
+          <p className="italic text-gray-500 mt-4 text-sm md:text-base">
+            {note}
           </p>
         )}
-        {text && <p className="text-gray-300 mt-2 leading-relaxed">{text}</p>}
-        {note && <p className="italic text-gray-500 mt-2">{note}</p>}
       </div>
     </div>
   );

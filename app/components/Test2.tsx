@@ -406,7 +406,7 @@ export default function NebulaScene() {
           </h1>
           <p ref={textRef} className="text-gray-300 text-5xl leading-[1.2] flex flex-col gap-1">
             <span className="word block opacity-0">Crafting</span>
-            <span className="word block opacity-0">Cosmic</span>
+            <span className="word block opacity-0">YOUR</span>
             <span className="word block opacity-0">Digital</span>
             <span className="word block opacity-0">Visions</span>
           </p>
