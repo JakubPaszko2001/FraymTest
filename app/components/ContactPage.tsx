@@ -122,7 +122,7 @@ export default function ContactPage() {
           ref={footerRef}
           className="mt-20 text-sm text-gray-500 tracking-widest uppercase"
         >
-          ORBITING AT <span className="text-blue-400 block mt-2">hello@fraymweb.com</span>
+          ORBITING AT <span className="text-blue-400 block mt-2">hello@fraymweb.co</span>
         </div>
       </div>
     </main>
