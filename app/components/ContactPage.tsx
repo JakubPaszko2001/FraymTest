@@ -57,7 +57,7 @@ export default function ContactPage() {
       <div className="relative z-10 max-w-3xl mx-auto text-center px-6 py-24 space-y-10">
         <h1
           ref={titleRef}
-          className="text-4xl md:text-6xl font-extrabold text-blue-500 tracking-widest"
+          className="text-4xl md:text-6xl font-extrabold text-white tracking-widest"
         >
           CONTACT US
         </h1>

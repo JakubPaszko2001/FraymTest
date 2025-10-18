@@ -401,10 +401,10 @@ export default function NebulaScene() {
 
       {/* ✨ napisy */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center font-[HyperBlob] uppercase overflow-hidden">
-          <h1 ref={titleRef} className="text-2xl mb-4 opacity-0 tracking-[0.3em]">
+          <h1 ref={titleRef}  className="text-[clamp(3vh,_4vw,_3.5vh)] mb-4 opacity-0 tracking-[0.3em] transition-[font-size] duration-500 ease-in-out">
             FRAYMWEB
           </h1>
-          <p ref={textRef} className="text-gray-300 text-5xl leading-[1.2] flex flex-col gap-1">
+          <p ref={textRef} className="text-gray-300 text-[6vh] leading-[1.2] flex flex-col gap-1">
             <span className="word block opacity-0">Crafting</span>
             <span className="word block opacity-0">YOUR</span>
             <span className="word block opacity-0">Digital</span>
