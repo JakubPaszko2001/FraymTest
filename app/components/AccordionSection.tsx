@@ -116,20 +116,20 @@ function AccordionItem({ title, items, isOpen, onToggle }: SectionProps) {
     >
       <button
         onClick={onToggle}
-        className="w-full flex justify-between items-center py-4 lg:py-8 px-4 lg:px-8 text-white font-extrabold text-lg lg:text-4xl uppercase tracking-wide transition-all duration-300"
+        className="w-full flex justify-between items-center py-4 md:py-8 px-4 md:px-8 text-white font-extrabold text-lg md:text-4xl uppercase tracking-wide transition-all duration-300"
       >
         <span ref={titleRef}>{title}</span>
         <span
           ref={arrowRef}
-          className="w-3 h-3 lg:w-5 lg:h-5 border-r-2 border-b-2 border-white transform rotate-45 transition-transform duration-300"
+          className="w-3 h-3 md:w-5 md:h-5 border-r-2 border-b-2 border-white transform rotate-45 transition-transform duration-300"
         ></span>
       </button>
 
       <div
         ref={contentRef}
-        className="overflow-hidden opacity-0 h-0 pl-8 pr-4 lg:pl-16 lg:pr-10 text-gray-200 text-sm lg:text-2xl"
+        className="overflow-hidden opacity-0 h-0 pl-8 pr-4 md:pl-16 md:pr-10 text-gray-200 text-sm md:text-2xl"
       >
-        <ul className="pb-4 space-y-2 lg:space-y-4">
+        <ul className="pb-4 space-y-2 md:space-y-4">
           {items.map((item, i) => (
             <li
               key={i}
@@ -277,7 +277,7 @@ export default function AccordionSection() {
   }, []);
 
   return (
-    <section className="relative w-full flex items-center md:min-h-[80vh] justify-center text-start flex-col font-[HyperBlob] px-4 lg:px-0 pt-10">
+    <section className="relative w-full flex items-center md:min-h-[80vh] justify-center text-start flex-col font-[HyperBlob] px-4 md:px-0 pt-10">
       <Image
         ref={imageRef}
         src={BrushStroke}
@@ -288,12 +288,12 @@ export default function AccordionSection() {
 
       <h2
         ref={textH2}
-        className="md:hidden text-xl lg:text-5xl font-extrabold z-20 text-white"
+        className="md:hidden text-xl md:text-5xl font-extrabold z-20 text-white"
       >
         We Create
       </h2>
 
-      <div className="accordion-container relative w-full lg:max-w-[1124px] backdrop-blur-[1px] text-white border border-gray-700 divide-y divide-gray-700">
+      <div className="accordion-container relative w-full md:max-w-[1124px] backdrop-blur-[1px] text-white border border-gray-700 divide-y divide-gray-700">
         {sections.map((section, index) => (
           <AccordionItem
             key={index}

@@ -14,13 +14,13 @@ export default function Navbar() {
         gsap.to(menuRef.current, {
           y: 0,
           duration: 0.6,
-          ease: 'power4.out'
+          ease: 'power4.out',
         })
       } else {
         gsap.to(menuRef.current, {
           y: '-100%',
           duration: 0.6,
-          ease: 'power4.in'
+          ease: 'power4.in',
         })
       }
     }
@@ -29,71 +29,129 @@ export default function Navbar() {
   return (
     <nav
       className="
-        fixed inset-x-0 top-0 z-50 h-[72px]
-        flex items-center justify-between w-full
-        px-6 md:px-10
+        fixed top-0 left-0 right-0 z-50
+        flex items-center justify-between
+        px-6 md:px-10 h-[80px]
+        backdrop-blur-[1px] bg-transparent
+        border-b-[1px] border-[#0000ff]/100
+        font-[HyperBlob]
       "
     >
       {/* LOGO */}
       <Link href="/" className="select-none">
-        <span className="text-white font-serif font-bold text-[28px] leading-none">
-          F
+        <span className="text-[#0000ff] text-3xl font-extrabold tracking-wider">
+          FRAYM
         </span>
       </Link>
 
-      {/* HAMBURGER */}
+      {/* DESKTOP NAV */}
+      <div
+        className="
+          hidden lg:flex items-center space-x-10
+          text-white uppercase text-sm tracking-widest
+        "
+      >
+        <a
+          href="#services"
+          className="relative group transition-colors duration-300"
+        >
+          <span className="group-hover:text-[#0000ff]">Services</span>
+          <span className="absolute left-0 bottom-[-4px] w-0 h-[1px] bg-[#0000ff] transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        <a
+          href="#portfolio"
+          className="relative group transition-colors duration-300"
+        >
+          <span className="group-hover:text-[#0000ff]">Portfolio</span>
+          <span className="absolute left-0 bottom-[-4px] w-0 h-[1px] bg-[#0000ff] transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        <a
+          href="#process"
+          className="relative group transition-colors duration-300"
+        >
+          <span className="group-hover:text-[#0000ff]">Process</span>
+          <span className="absolute left-0 bottom-[-4px] w-0 h-[1px] bg-[#0000ff] transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        <a
+          href="#contact"
+          className="relative group transition-colors duration-300"
+        >
+          <span className="group-hover:text-[#0000ff]">Contact</span>
+          <span className="absolute left-0 bottom-[-4px] w-0 h-[1px] bg-[#0000ff] transition-all duration-300 group-hover:w-full"></span>
+        </a>
+
+        {/* CTA */}
+        <Link
+          href="#contact"
+          className="
+            ml-6 border border-[#0000ff] text-[#0000ff] px-5 py-2
+            rounded-none hover:bg-[#0000ff] hover:text-black
+            transition-all duration-300 tracking-widest
+          "
+        >
+          GET A QUOTE
+        </Link>
+      </div>
+
+      {/* MOBILE TOGGLE */}
       <button
         onClick={() => setOpen(!open)}
-        className="
-          text-white text-3xl
-          hover:text-[#ff00ff]
-          transition-colors
-          z-[60]
-        "
-        aria-label="Menu"
+        className="text-white text-3xl lg:hidden hover:text-[#0000ff] transition-colors z-[60]"
       >
         {open ? <FiX /> : <FiMenu />}
       </button>
 
-      {/* MENU OVERLAY */}
+      {/* MOBILE MENU */}
       <div
         ref={menuRef}
         className="
           fixed top-0 left-0 w-full h-screen
-          bg-black flex flex-col items-center justify-center
+          bg-black/90 flex flex-col items-center justify-center
           space-y-8 text-white text-2xl
-          z-50 font-[HyperBlob]
+          font-[HyperBlob] lg:hidden z-50
+          border-b border-[#0000ff]/30
         "
         style={{ transform: 'translateY(-100%)' }}
       >
         <a
-          href="#oferta"
-          className="hover:text-[#ff00ff] transition-colors"
+          href="#services"
+          className="hover:text-[#0000ff] transition-colors"
           onClick={() => setOpen(false)}
         >
-          Oferta
+          Services
         </a>
         <a
-          href="#realizacje"
-          className="hover:text-[#ff00ff] transition-colors"
+          href="#portfolio"
+          className="hover:text-[#0000ff] transition-colors"
           onClick={() => setOpen(false)}
         >
-          Realizacje
+          Portfolio
         </a>
         <a
-          href="#proces"
-          className="hover:text-[#ff00ff] transition-colors"
+          href="#process"
+          className="hover:text-[#0000ff] transition-colors"
           onClick={() => setOpen(false)}
         >
-          Proces
+          Process
         </a>
         <a
-          href="#kontakt"
-          className="hover:text-[#ff00ff] transition-colors"
+          href="#contact"
+          className="hover:text-[#0000ff] transition-colors"
           onClick={() => setOpen(false)}
         >
-          Kontakt
+          Contact
         </a>
+        <Link
+          href="#contact"
+          onClick={() => setOpen(false)}
+          className="
+            mt-6 px-6 py-2 border border-[#0000ff]
+            text-[#0000ff] hover:bg-[#0000ff] hover:text-black
+            transition-all duration-300
+          "
+        >
+          GET A QUOTE
+        </Link>
       </div>
     </nav>
   )

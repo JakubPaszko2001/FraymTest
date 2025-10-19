@@ -49,7 +49,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="relative min-h-screen text-gray-300 overflow-hidden font-[HyperBlob]">
+    <main className="relative text-gray-300 overflow-hidden font-[HyperBlob]">
       {/* Tło z gwiazdami */}
       <div className="absolute inset-0 bg-[url('/stars-bg.png')] bg-cover bg-center opacity-30"></div>
 
@@ -67,7 +67,7 @@ export default function ContactPage() {
           className="text-white max-w-2xl mx-auto leading-relaxed font-light"
         >
           Have a project in mind? Let’s create something{" "}
-          <span className="text-blue-400">cosmic</span> together. Reach out to us and we’ll get
+          <span className="text-[#0000ff] backdrop-blur-[1px]">amazing</span> together. Reach out to us and we’ll get
           back to you within 48 hours.
         </p>
 
@@ -79,7 +79,7 @@ export default function ContactPage() {
               onChange={handleChange}
               placeholder="Name"
               required
-              className="w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              className="backdrop-blur-[2px] w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
             />
             <input
               name="email"
@@ -88,7 +88,7 @@ export default function ContactPage() {
               onChange={handleChange}
               placeholder="Email"
               required
-              className="w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              className="backdrop-blur-[2px] w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
             />
           </div>
 
@@ -97,7 +97,7 @@ export default function ContactPage() {
             value={formData.subject}
             onChange={handleChange}
             placeholder="Subject"
-            className="w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+            className="backdrop-blur-[2px] w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
           />
 
           <textarea
@@ -107,12 +107,12 @@ export default function ContactPage() {
             placeholder="Your Message"
             rows={5}
             required
-            className="w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+            className="backdrop-blur-[2px] w-full placeholder-white bg-transparent border border-blue-500/40 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
           />
 
           <button
             type="submit"
-            className="relative overflow-hidden border border-blue-500 text-blue-500 font-bold tracking-widest px-10 py-3 rounded-xl uppercase transition duration-300 hover:bg-blue-600 hover:text-white"
+            className="backdrop-blur-[2px] relative overflow-hidden border border-blue-500 text-blue-500 font-bold tracking-widest px-10 py-3 rounded-xl uppercase transition duration-300 hover:bg-blue-600 hover:text-white"
           >
             SEND MESSAGE
           </button>
@@ -122,7 +122,7 @@ export default function ContactPage() {
           ref={footerRef}
           className="mt-20 text-sm text-gray-500 tracking-widest uppercase"
         >
-          ORBITING AT <span className="text-blue-400 block mt-2">hello@fraymweb.co</span>
+          ORBITING AT <span className="text-blue-400 block mt-2">fraymweb<span className="font-normal">@</span>gmail.com</span>
         </div>
       </div>
     </main>
