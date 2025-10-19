@@ -404,7 +404,7 @@ export default function NebulaScene() {
           <h1 ref={titleRef} className="text-[clamp(2.5vh,_4vw,_3.5vh)] mb-4 opacity-0 tracking-[0.3em] transition-[font-size] duration-500 ease-in-out">
             FRAYMWEB
           </h1>
-          <p ref={textRef} className="text-gray-300 text-[5vh] lg:text-[8vh] leading-[1.2] flex flex-col gap-1">
+          <p ref={textRef} className="text-gray-300 text-[clamp(5vh,_6vw,_8vh)] leading-[1.2] flex flex-col gap-1">
             <span className="word block opacity-0">Crafting</span>
             <span className="word block opacity-0">YOUR</span>
             <span className="word block opacity-0">Digital</span>

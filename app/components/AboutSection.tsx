@@ -145,7 +145,7 @@ export default function AboutSection() {
          className="text-[clamp(3vh,_6vw,_6vh)] md:text-center fade-text lg:text-center font-extrabold leading-snug text-white max-w-6xl uppercase z-20 transition-[font-size] duration-500 ease-in-out"
       >
         WE ARE{" "}
-        <span className="backdrop-blur-[1px] rounded-md px-1">INNOVATIVE</span> company that uses the latest technologies and creates <span className="backdrop-blur-[1px] rounded-md px-1">UNIQUE</span> designs that amaze and leave a lasting impression on our clients.
+        <span className="backdrop-blur-[1px]  rounded-md px-1">INNOVATIVE</span> company that uses the latest technologies and creates <span className="backdrop-blur-[1px] rounded-md px-1">UNIQUE</span> designs that amaze and leave a lasting impression on our clients.
       </p>
     </section>
   );
