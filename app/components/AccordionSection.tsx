@@ -217,23 +217,23 @@ export default function AccordionSection() {
   }, []);
 
   return (
-    <section className="relative w-full flex items-center justify-center text-start flex-col font-[HyperBlob] px-4 pt-10">
+    <section className="relative w-full flex items-center md:min-h-[60vh] justify-center text-start flex-col font-[HyperBlob] px-4 lg:px-0 pt-10">
       {/* Brush Stroke z animacją */}
       <Image
         ref={imageRef}
         src={BrushStroke}
         alt="Brush Stroke"
         width={320}
-        className="z-10"
+        className="z-10 md:hidden"
       />
 
       {/* Nagłówek z fade-in */}
-      <h2 ref={textH2} className="text-xl font-extrabold z-20 text-white">
+      <h2 ref={textH2} className="md:hidden text-xl font-extrabold z-20 text-white">
         We Create
       </h2>
 
       {/* Accordion z kategoriami */}
-      <div className="accordion-container relative w-full backdrop-blur-[1px] max-w-md text-white border border-gray-700 divide-y divide-gray-700">
+      <div className="accordion-container relative w-full lg:max-w-[1124px] backdrop-blur-[1px] text-white border border-gray-700 divide-y divide-gray-700">
         {sections.map((section, index) => (
           <AccordionItem
             key={index}

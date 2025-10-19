@@ -313,15 +313,15 @@ export default function NebulaScene() {
     });
 
     // 🔥 animacja koloru napisów
-    // if (textRef.current) {
-    //   const words = textRef.current.querySelectorAll(".word");
-    //   colorTween.current = gsap.to(words, {
-    //     color: "white",
-    //     duration: 0.6,
-    //     ease: "power2.out",
-    //     stagger: 0.05,
-    //   });
-    // }
+    if (textRef.current) {
+      const words = textRef.current.querySelectorAll(".word");
+      colorTween.current = gsap.to(words, {
+        color: "#6699FF",
+        duration: 0.6,
+        ease: "power2.out",
+        stagger: 0.05,
+      });
+    }
 
     // 🌫️ pokazanie blurCirclesRef
     if (blurCirclesRef.current) {
@@ -355,15 +355,15 @@ export default function NebulaScene() {
 
     // 🎨 powrót koloru
     if (colorTween.current) colorTween.current.kill();
-    // if (textRef.current) {
-    //   const words = textRef.current.querySelectorAll(".word");
-    //   gsap.to(words, {
-    //     color: "#d1d5db",
-    //     duration: 0.8,
-    //     ease: "power2.inOut",
-    //     stagger: 0.05,
-    //   });
-    // }
+    if (textRef.current) {
+      const words = textRef.current.querySelectorAll(".word");
+      gsap.to(words, {
+        color: "#d1d5db",
+        duration: 0.8,
+        ease: "power2.inOut",
+        stagger: 0.05,
+      });
+    }
 
     // 🌫️ zniknięcie blurCirclesRef
     if (blurCirclesRef.current) {
@@ -385,7 +385,7 @@ export default function NebulaScene() {
 
   return (
     <section className="relative w-full h-[100svh] bg-black overflow-hidden">
-      <div ref={blurCirclesRef} className="absolute hidden border-2 border-[#6699FF] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !p-12 rounded-[100%] backdrop-blur-[2px] w-[400px] h-[400px] pointer-events-none z-10">
+      <div ref={blurCirclesRef} className="absolute hidden border-2 border-[#6699FF] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !p-12 rounded-[100%] backdrop-blur-[1px] w-[400px] h-[400px] lg:w-[600px] lg:h-[600px] pointer-events-none z-10">
       </div>
       {/* 🔘 przycisk eksplozji */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-[calc(3svh)] z-50">
@@ -401,10 +401,10 @@ export default function NebulaScene() {
 
       {/* ✨ napisy */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center font-[HyperBlob] uppercase overflow-hidden">
-          <h1 ref={titleRef}  className="text-[clamp(3vh,_4vw,_3.5vh)] mb-4 opacity-0 tracking-[0.3em] transition-[font-size] duration-500 ease-in-out">
+          <h1 ref={titleRef} className=" text-[clamp(2.5vh,_4vw,_3.5vh)] mb-4 opacity-0 tracking-[0.3em] transition-[font-size] duration-500 ease-in-out">
             FRAYMWEB
           </h1>
-          <p ref={textRef} className="text-gray-300 text-[6vh] leading-[1.2] flex flex-col gap-1">
+          <p ref={textRef} className="text-gray-300 text-[5vh] leading-[1.2] flex flex-col gap-1">
             <span className="word block opacity-0">Crafting</span>
             <span className="word block opacity-0">YOUR</span>
             <span className="word block opacity-0">Digital</span>

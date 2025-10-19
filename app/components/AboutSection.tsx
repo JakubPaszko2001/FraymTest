@@ -84,19 +84,19 @@ export default function AboutSection() {
 
       const scrollConfig = {
         trigger: textRef.current,
-        start: "top 90%",
-        end: "top 30%",
-        scrub: true,
+        start: "top 100%",
+        end: "top 10%",
+        scrub: 2,
       };
 
       // litery spoza <span>
       gsap.fromTo(
         (text.chars ?? []).filter((c) => !c.closest("span")),
-        { opacity: 0.4, color: "#777" },
+        { opacity: 0.4, color: "#333333" },
         {
           opacity: 1,
           color: "#ffffff",
-          duration: 0.6,
+          duration: 1.2,
           stagger: 0.02,
           ease: "power2.out",
           scrollTrigger: scrollConfig,
@@ -130,19 +130,19 @@ export default function AboutSection() {
         ref={imageRef}
         src={BrushStroke}
         alt="Brush Stroke"
-        // className="absolute top-10 left-10 z-10"
+        className="md:hidden"
         width={300}
       />
 
       {/* 🔹 Nagłówek */}
-      <h2 ref={textH2} className="text-xl font-extrabold z-20 text-white">
+      <h2 ref={textH2} className="md:hidden text-xl font-extrabold z-20 text-white">
         About
       </h2>
 
       {/* 🔹 Tekst z animacją char */}
       <p
         ref={textRef}
-         className="fade-text text-4xl lg:text-center  font-extrabold leading-snug text-white max-w-6xl uppercase z-20"
+         className="text-[clamp(3vh,_6vw,_6vh)] md:text-center fade-text lg:text-center font-extrabold leading-snug text-white max-w-6xl uppercase z-20 transition-[font-size] duration-500 ease-in-out"
       >
         WE ARE{" "}
         <span className="backdrop-blur-[1px] rounded-md px-1">INNOVATIVE</span> company that uses the latest technologies and creates <span className="backdrop-blur-[1px] rounded-md px-1">UNIQUE</span> designs that amaze and leave a lasting impression on our clients.
