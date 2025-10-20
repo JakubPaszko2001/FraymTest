@@ -47,7 +47,7 @@ export default function Navbar() {
         opacity: 0,
         duration: 0.8,
         ease: 'power4.in',
-        onComplete: () => gsap.set(menuRef.current, { display: 'none', visibility: 'hidden' }),
+        onComplete: () => { gsap.set(menuRef.current, { display: 'none', visibility: 'hidden' }); },
       })
     }
   }, [open])
