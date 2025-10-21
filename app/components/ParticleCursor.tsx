@@ -31,12 +31,6 @@ export default function CursorEffect1() {
       // usuń wszystkie trwające animacje na kursorze, zanim rozpoczniesz nową
       gsap.killTweensOf(cursor)
 
-      // jeśli element lub jego rodzic ma cursor-ignore → nic nie rób
-      if (target.closest('.cursor-ignore')) {
-        gsap.to(cursor, { scale: 1, duration: 0.3, ease: 'none' })
-        return
-      }
-
       if (target.closest('a') || target.closest('button')) {
         gsap.to(cursor, {
           scale: 1.5,
