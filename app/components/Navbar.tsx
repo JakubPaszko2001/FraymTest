@@ -115,16 +115,16 @@ export default function Navbar() {
           className="hidden xl:flex flex-1 justify-center items-center space-x-12 text-white/90 uppercase text-[13px] tracking-widest"
         >
           <div className="nav-item opacity-0">
-            <a href="#services" className="hover:text-[#00aaff] transition-colors">Services</a>
+            <a href="#services" className="hover:text-yellow-500 transition-colors">Services</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#portfolio" className="hover:text-[#00aaff] transition-colors">Portfolio</a>
+            <a href="#portfolio" className="hover:text-yellow-500 transition-colors">Portfolio</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#process" className="hover:text-[#00aaff] transition-colors">Process</a>
+            <a href="#process" className="hover:text-yellow-500 transition-colors">Process</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#contact" className="hover:text-[#00aaff] transition-colors">Contact</a>
+            <a href="#contact" className="hover:text-yellow-500 transition-colors">Contact</a>
           </div>
         </div>
 
@@ -179,10 +179,10 @@ export default function Navbar() {
           <FiX />
         </button>
 
-        <div className="menu-item"><a href="#services" onClick={() => setOpen(false)} className="hover:text-[#00e0ff] transition-all duration-300">Services</a></div>
-        <div className="menu-item"><a href="#portfolio" onClick={() => setOpen(false)} className="hover:text-[#00e0ff] transition-all duration-300">Portfolio</a></div>
-        <div className="menu-item"><a href="#process" onClick={() => setOpen(false)} className="hover:text-[#00e0ff] transition-all duration-300">Process</a></div>
-        <div className="menu-item"><a href="#contact" onClick={() => setOpen(false)} className="hover:text-[#00e0ff] transition-all duration-300">Contact</a></div>
+        <div className="menu-item"><a href="#services" onClick={() => setOpen(false)}>Services</a></div>
+        <div className="menu-item"><a href="#portfolio" onClick={() => setOpen(false)}>Portfolio</a></div>
+        <div className="menu-item"><a href="#process" onClick={() => setOpen(false)}>Process</a></div>
+        <div className="menu-item"><a href="#contact" onClick={() => setOpen(false)}>Contact</a></div>
 
         {/* 🔹 CTA w divie, też animowany */}
         <div className="menu-item mt-10">

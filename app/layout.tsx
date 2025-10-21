@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import ParticleCursor from './components/ParticleCursor';
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
       <body>
         <Navbar />
         {children}
+        <ParticleCursor />
       </body>
     </html>
   );
