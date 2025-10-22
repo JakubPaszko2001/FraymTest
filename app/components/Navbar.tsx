@@ -115,16 +115,16 @@ export default function Navbar() {
           className="hidden xl:flex flex-1 justify-center items-center space-x-12 text-white/90 uppercase text-[13px] tracking-widest"
         >
           <div className="nav-item opacity-0">
-            <a href="#services" className="hover:text-yellow-500 transition-colors">Services</a>
+            <a href="#services" className="hover:text-cyan-500 transition-colors">Services</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#portfolio" className="hover:text-yellow-500 transition-colors">Portfolio</a>
+            <a href="#portfolio" className="hover:text-cyan-500 transition-colors">Portfolio</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#process" className="hover:text-yellow-500 transition-colors">Process</a>
+            <a href="#process" className="hover:text-cyan-500 transition-colors">Process</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#contact" className="hover:text-yellow-500 transition-colors">Contact</a>
+            <a href="#contact" className="hover:text-cyan-500 transition-colors">Contact</a>
           </div>
         </div>
 

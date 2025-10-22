@@ -63,11 +63,12 @@ export default function CursorEffect1() {
       ref={cursorRef}
       className="
         fixed top-0 left-0 w-40 h-40
-        rounded-full bg-white
+        rounded-full bg-black
         mix-blend-difference
         pointer-events-none
         z-[9999]
-        shadow-[0_0_30px_rgba(255,255,255,0.3)]
+        shadow-[0_0_40px_rgba(0,136,255,0.9),0_0_80px_rgba(0,136,255,0.7),0_0_120px_rgba(0,136,255,0.4)]
+        
       "
     />
   )
