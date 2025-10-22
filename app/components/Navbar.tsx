@@ -103,7 +103,17 @@ export default function Navbar() {
         <Link href="/" className="select-none z-[70]">
           <span
             ref={logoRef}
-            className="text-[#0066ff] text-2xl font-extrabold tracking-wide block opacity-0"
+            className="
+              relative inline-block
+              text-2xl font-extrabold tracking-wide
+              opacity-0 cursor-pointer
+              bg-gradient-to-r from-[#0066ff] via-[#ffffff] to-[#0066ff]
+              bg-[length:200%_auto]
+              text-transparent bg-clip-text
+              transition-transform duration-500
+              hover:scale-[1.08]
+              hover:animate-[shine_1.5s_linear]
+            "
           >
             FRAYM
           </span>
