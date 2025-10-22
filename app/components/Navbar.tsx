@@ -104,7 +104,7 @@ export default function Navbar() {
           <span
             ref={logoRef}
             className="
-              relative inline-block
+              relative
               text-2xl font-extrabold tracking-wide
               opacity-0 cursor-pointer
               bg-gradient-to-r from-[#0066ff] via-[#ffffff] to-[#0066ff]
@@ -112,7 +112,7 @@ export default function Navbar() {
               text-transparent bg-clip-text
               transition-transform duration-500
               hover:scale-[1.08]
-              hover:animate-[shine_1.5s_linear]
+              hover:animate-[shine_1.5s_linear] opacity-0
             "
           >
             FRAYM
@@ -125,16 +125,16 @@ export default function Navbar() {
           className="hidden xl:flex flex-1 justify-center items-center space-x-12 text-white/90 uppercase text-[13px] tracking-widest"
         >
           <div className="nav-item opacity-0">
-            <a href="#services" className="hover:text-cyan-500 transition-colors">Services</a>
+            <a href="#services" className="hover:text-blue-500 transition-colors">Services</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#portfolio" className="hover:text-cyan-500 transition-colors">Portfolio</a>
+            <a href="#portfolio" className="hover:text-blue-500 transition-colors">Portfolio</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#process" className="hover:text-cyan-500 transition-colors">Process</a>
+            <a href="#process" className="hover:text-blue-500 transition-colors">Process</a>
           </div>
           <div className="nav-item opacity-0">
-            <a href="#contact" className="hover:text-cyan-500 transition-colors">Contact</a>
+            <a href="#contact" className="hover:text-blue-500 transition-colors">Contact</a>
           </div>
         </div>
 
