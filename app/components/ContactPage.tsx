@@ -112,7 +112,19 @@ export default function ContactPage() {
 
           <button
             type="submit"
-            className="backdrop-blur-[2px] relative overflow-hidden border border-blue-500 text-blue-500 font-bold tracking-widest px-10 py-3 rounded-xl uppercase transition duration-300 hover:bg-blue-600 hover:text-white"
+              className="
+                relative overflow-hidden
+                border border-blue-500 text-blue-500 font-bold tracking-widest
+                px-10 py-3 rounded-xl uppercase transition duration-500
+                backdrop-blur-[2px] cursor-pointer
+                before:content-[''] before:absolute before:inset-0
+                before:bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.3),transparent)]
+                before:translate-x-[-100%] before:transition-transform before:duration-700 before:ease-out
+                hover:before:translate-x-[100%]
+                hover:bg-blue-600 hover:text-white
+                hover:shadow-[0_0_25px_rgba(0,153,255,0.9)]
+                hover:scale-[1.06]
+              "
           >
             SEND MESSAGE
           </button>
