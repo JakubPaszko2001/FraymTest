@@ -261,7 +261,7 @@ export default function NebulaScene() {
     if (!titleRef.current || !textRef.current) return;
     const tl = gsap.timeline({
       defaults: { ease: "power4.out" },
-      delay: 2.5,
+      delay: 1.2,
     });
 
     tl.fromTo(

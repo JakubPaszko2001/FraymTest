@@ -177,7 +177,7 @@ export default function HowWeWork() {
       <div
         className="
           w-full 
-          max-w-6xl 
+          max-w-6xl
           px-4 
           grid 
           grid-cols-1                /* do md = 1 kolumna */

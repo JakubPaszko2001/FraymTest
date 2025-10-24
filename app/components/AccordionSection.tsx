@@ -277,7 +277,7 @@ export default function AccordionSection() {
   }, []);
 
   return (
-    <section className="relative w-full flex items-center md:min-h-[80vh] justify-center text-start flex-col font-[HyperBlob] px-4 md:px-0 pt-10">
+    <section className="relative w-full flex items-center md:min-h-[80vh] lg:h-screen justify-center text-start flex-col font-[HyperBlob] px-4 md:px-0 pt-10">
       <Image
         ref={imageRef}
         src={BrushStroke}
