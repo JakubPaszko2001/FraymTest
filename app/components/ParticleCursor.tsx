@@ -76,6 +76,9 @@ export default function CursorEffect1() {
         z-[9999]
         shadow-[0_0_40px_rgba(59,130,246,0.9),0_0_80px_rgba(59,130,246,0.6),0_0_120px_rgba(59,130,246,0.35)]
       "
+        style={{
+        transform: 'translate(0, -300px)',
+      }}
     />
   )
 }

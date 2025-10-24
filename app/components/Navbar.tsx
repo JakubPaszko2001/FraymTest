@@ -25,7 +25,7 @@ export default function Navbar() {
       tl.to(menuRef.current, {
         y: 0,
         opacity: 1,
-        duration: 1.2, // 🔹 wolniejsze wejście całego modala
+        duration: 1.2,
         ease: 'power4.out',
       })
       tl.fromTo(
@@ -34,7 +34,7 @@ export default function Navbar() {
         {
           y: 0,
           opacity: 1,
-          stagger: 0.15, // 🔹 wolniejszy rytm pojawiania się linków
+          stagger: 0.15,
           duration: 0.9,
           ease: 'power3.out',
         },
@@ -47,40 +47,35 @@ export default function Navbar() {
         opacity: 0,
         duration: 0.8,
         ease: 'power4.in',
-        onComplete: () => { gsap.set(menuRef.current, { display: 'none', visibility: 'hidden' }); },
+        onComplete: () => {
+          gsap.set(menuRef.current, { display: 'none', visibility: 'hidden' })
+        },
       })
     }
   }, [open])
 
-  // 🔹 NAVBAR ENTRANCE ANIMATION
+  // 🔹 NAVBAR ENTRANCE ANIMATION (najpierw navbar, potem zawartość)
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
+    // 1️⃣ Najpierw wjeżdża cały navbar
     tl.fromTo(
       navRef.current,
       { y: -60, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.2, ease: 'power2.out' } // 🔹 spowolnione wejście
+      { y: 0, opacity: 1, duration: 1.0, ease: 'power2.out' }
     )
 
+    // 2️⃣ Potem pojawia się zawartość (logo, linki, CTA, przycisk)
     tl.fromTo(
-      [logoRef.current, buttonRef.current],
+      [
+        logoRef.current,
+        buttonRef.current,
+        ...(linksRef.current?.querySelectorAll('.nav-item') || []),
+        ctaWrapperRef.current,
+      ],
       { y: -20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8 },
-      '-=0.7'
-    )
-
-    tl.fromTo(
-      linksRef.current?.querySelectorAll('.nav-item') || [],
-      { y: -15, opacity: 0 },
-      { y: 0, opacity: 1, stagger: 0.15, duration: 0.8 },
-      '-=0.4'
-    )
-
-    tl.fromTo(
-      ctaWrapperRef.current,
-      { y: -15, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8 },
-      '-=0.4'
+      { y: 0, opacity: 1, duration: 0.8, stagger: 0.05 },
+      '-=0.3' // lekko nachodzą na siebie w czasie
     )
   }, [])
 
@@ -112,7 +107,7 @@ export default function Navbar() {
               text-transparent bg-clip-text
               transition-transform duration-500
               hover:scale-[1.08]
-              hover:animate-[shine_1.5s_linear] opacity-0
+              hover:animate-[shine_1.5s_linear]
             "
           >
             FRAYM
@@ -194,7 +189,7 @@ export default function Navbar() {
         <div className="menu-item"><a href="#process" onClick={() => setOpen(false)}>Process</a></div>
         <div className="menu-item"><a href="#contact" onClick={() => setOpen(false)}>Contact</a></div>
 
-        {/* 🔹 CTA w divie, też animowany */}
+        {/* 🔹 CTA w divie */}
         <div className="menu-item mt-10">
           <Link
             href="#contact"
